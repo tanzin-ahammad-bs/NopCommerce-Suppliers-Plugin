@@ -2,7 +2,7 @@
 using Nop.Core;
 using Nop.Plugin.Misc.Suppliers.Factories;
 using Nop.Plugin.Misc.Suppliers.Models;
-
+using Nop.Services.Security;
 using Nop.Web.Areas.Admin.Models.Vendors;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
@@ -14,14 +14,17 @@ public class SuppliersController : BasePluginController
     #region Fields
 
     protected readonly ISuppliersModelFactory _suppliersModelFactory;
+    protected readonly IPermissionService _permissionService;
+
 
     #endregion
 
     #region Ctor
 
-    public SuppliersController(ISuppliersModelFactory suppliersModelFactory)
+    public SuppliersController(ISuppliersModelFactory suppliersModelFactory, IPermissionService permissionService)
     {
         _suppliersModelFactory = suppliersModelFactory;
+        _permissionService = permissionService;
     }
 
     #endregion

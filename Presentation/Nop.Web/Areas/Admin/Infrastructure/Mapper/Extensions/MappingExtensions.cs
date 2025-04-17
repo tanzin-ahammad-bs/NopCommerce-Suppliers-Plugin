@@ -22,6 +22,7 @@ public static class MappingExtensions
     private static TDestination Map<TDestination>(this object source)
     {
         //use AutoMapper for mapping objects
+        //var supplierModel = supplier.ToModel<SupplierModel>();
         return AutoMapperConfiguration.Mapper.Map<TDestination>(source);
     }
 

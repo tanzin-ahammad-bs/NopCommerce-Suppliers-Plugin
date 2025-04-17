@@ -1,5 +1,9 @@
+﻿﻿@using Nop.Plugin.Misc.Suppliers.Models
+
+
 @model SuppliersSearchModel
 @{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 	//page title
 	ViewBag.PageTitle = T("Admin.Suppliers").Text;
 	//active menu item (system name)
@@ -7,14 +11,13 @@
 }
 
 @{
-	const string hideSearchBlockAttributeName = "VendorsPage.HideSearchBlock";
+	const string hideSearchBlockAttributeName = "VendorPage.HideSearchBlock";
 	var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
 }
 
 <div class="content-header clearfix">
 	<h1 class="float-left">
-		@T("Admin.Suppliers")
-		@T("Admin.Suppliers")
+		@T("Admin.Vendor")
 	</h1>
 	<div class="float-right">
 		<a asp-action="Create" class="btn btn-primary">
@@ -74,7 +77,8 @@
 
 				<div class="card card-default">
 					<div class="card-body">
-						
+						<nop-doc-reference asp-string-resource="@T("Admin.Documentation.Reference.VendorManagement", NopLinksDefaults.Docs.VendorManagement + NopLinksDefaults.Utm.OnAdmin)" />
+
 						@await Html.PartialAsync("Table", new DataTablesModel
  {
 	 Name = "suppliers-grid",
