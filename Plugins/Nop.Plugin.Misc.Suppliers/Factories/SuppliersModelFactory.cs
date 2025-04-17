@@ -26,7 +26,7 @@ public class SuppliersModelFactory : ISuppliersModelFactory
     {
         ArgumentNullException.ThrowIfNull(searchModel);
 
-        //get vendors
+        //get suppliers
         var suppliers = await _supplierService.GetAllSuppliersAsync(showHidden: true,
             name: searchModel.SearchName,
             email: searchModel.SearchEmail,

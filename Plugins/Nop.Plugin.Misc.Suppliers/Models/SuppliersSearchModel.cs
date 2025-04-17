@@ -11,10 +11,10 @@ public record SuppliersSearchModel : BaseSearchModel
 {
     #region Properties
 
-    [NopResourceDisplayName("Admin.Vendors.List.SearchName")]
+    [NopResourceDisplayName("Admin.Suppliers.List.SearchName")]
     public string SearchName { get; set; }
 
-    [NopResourceDisplayName("Admin.Vendors.List.SearchEmail")]
+    [NopResourceDisplayName("Admin.Suppliers.List.SearchEmail")]
     public string SearchEmail { get; set; }
 
     #endregion

@@ -11,13 +11,13 @@
 }
 
 @{
-	const string hideSearchBlockAttributeName = "VendorPage.HideSearchBlock";
+	const string hideSearchBlockAttributeName = "SupplierPage.HideSearchBlock";
 	var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
 }
 
 <div class="content-header clearfix">
 	<h1 class="float-left">
-		@T("Admin.Vendor")
+		@T("Admin.Suppliers")
 	</h1>
 	<div class="float-right">
 		<a asp-action="Create" class="btn btn-primary">
@@ -65,7 +65,7 @@
 							</div>
 							<div class="row">
 								<div class="text-center col-12">
-									<button type="button" id="search-vendors" class="btn btn-primary btn-search">
+									<button type="button" id="search-suppliers" class="btn btn-primary btn-search">
 										<i class="fas fa-magnifying-glass"></i>
 										@T("Admin.Common.Search")
 									</button>
@@ -77,7 +77,7 @@
 
 				<div class="card card-default">
 					<div class="card-body">
-						<nop-doc-reference asp-string-resource="@T("Admin.Documentation.Reference.VendorManagement", NopLinksDefaults.Docs.VendorManagement + NopLinksDefaults.Utm.OnAdmin)" />
+						<nop-doc-reference asp-string-resource="@T("Admin.Documentation.Reference.SupplierManagement", NopLinksDefaults.Docs.VendorManagement + NopLinksDefaults.Utm.OnAdmin)" />
 
 						@await Html.PartialAsync("Table", new DataTablesModel
  {
