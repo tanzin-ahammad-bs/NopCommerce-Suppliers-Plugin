@@ -342,7 +342,7 @@ public partial class VendorModelFactory : IVendorModelFactory
     /// </returns>
     public virtual async Task<VendorModel> PrepareVendorModelAsync(VendorModel model, Vendor vendor, bool excludeProperties = false)
     {
-        Func<VendorLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<SupplierLocalizedModel, int, Task> localizedModelConfiguration = null;
 
         if (vendor != null)
         {

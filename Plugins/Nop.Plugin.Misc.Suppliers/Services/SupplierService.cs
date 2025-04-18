@@ -28,9 +28,9 @@ public class SupplierService : ISupplierService
                 query = query.Where(v => v.Email.Contains(email));
 
             if (!showHidden)
-                query = query.Where(v => v.Active);
+                query = query.Where(v => (bool)v.Active);
 
-            query = query.Where(v => !v.Deleted);
+            query = query.Where(v => (bool)!v.Deleted);
             query = query.OrderBy(v => v.DisplayOrder).ThenBy(v => v.Name).ThenBy(v => v.Email);
 
             return query;
@@ -38,4 +38,27 @@ public class SupplierService : ISupplierService
 
         return suppliers;
     }
+
+
+
+
+    public virtual async Task InsertSupplierAsync(Supplier supplier)
+    {
+        await _supplierRepository.InsertAsync(supplier);
+    }
+
+    public virtual async Task UpdateSupplierAsync(Supplier supplier)
+    {
+        await _supplierRepository.UpdateAsync(supplier);
+    }
+
+
+
+    public virtual async Task<Supplier> GetSupplierByIdAsync(int supplierId)
+    {
+        return await _supplierRepository.GetByIdAsync(supplierId, cache => default);
+    }
+
+
+
 }

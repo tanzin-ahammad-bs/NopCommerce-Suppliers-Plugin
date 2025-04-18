@@ -9,7 +9,7 @@ namespace Nop.Web.Areas.Admin.Models.Vendors;
 /// <summary>
 /// Represents a vendor model
 /// </summary>
-public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLocalizedModel>
+public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<SupplierLocalizedModel>
 {
     #region Ctor
 
@@ -20,7 +20,7 @@ public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLo
 
         Address = new AddressModel();
         VendorAttributes = new List<VendorAttributeModel>();
-        Locales = new List<VendorLocalizedModel>();
+        Locales = new List<SupplierLocalizedModel>();
         AssociatedCustomers = new List<VendorAssociatedCustomerModel>();
         VendorNoteSearchModel = new VendorNoteSearchModel();
     }
@@ -93,7 +93,7 @@ public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLo
 
     public List<VendorAttributeModel> VendorAttributes { get; set; }
 
-    public IList<VendorLocalizedModel> Locales { get; set; }
+    public IList<SupplierLocalizedModel> Locales { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.Fields.AssociatedCustomerEmails")]
     public IList<VendorAssociatedCustomerModel> AssociatedCustomers { get; set; }
@@ -141,7 +141,7 @@ public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLo
     #endregion
 }
 
-public partial record VendorLocalizedModel : ILocalizedLocaleModel
+public partial record SupplierLocalizedModel : ILocalizedLocaleModel
 {
     public int LanguageId { get; set; }
 
