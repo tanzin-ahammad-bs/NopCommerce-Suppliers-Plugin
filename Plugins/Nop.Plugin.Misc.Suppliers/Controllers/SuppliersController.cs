@@ -48,6 +48,7 @@ public class SuppliersController : BasePluginController
     protected readonly ISupplierService _supplierService;
     private static readonly char[] _separator = [','];
 
+
     #endregion
 
     #region Ctor
@@ -368,6 +369,33 @@ public class SuppliersController : BasePluginController
 
         return RedirectToAction("List");
     }
+
+
+
+
+
+
+
+    [AuthorizeAdmin]
+    [Area(AreaNames.ADMIN)]
+    
+    [AutoValidateAntiforgeryToken]
+    
+        [HttpPost]
+        public Task<IActionResult> AssignSupplier(int productId, int supplierId)
+        {
+        // TODO: Save this mapping (you can use a custom entity or generic attributes)
+        // Example: await _genericAttributeService.SaveAttributeAsync(product, "SelectedSupplierId", supplierId);
+
+        // Just return to the product edit page
+
+
+
+        _notificationService.SuccessNotification($"Assigned Supplier ID {supplierId} to Product ID {productId}");
+
+        return Task.FromResult<IActionResult>(RedirectToAction("Edit", "Product", new { id = productId }));
+        }
+    
 
 
 

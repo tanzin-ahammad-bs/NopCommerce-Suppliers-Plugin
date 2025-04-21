@@ -1,13 +1,16 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Nop.Services.Cms;
 using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Plugins;
 using Nop.Services.Security;
 using Nop.Web.Framework.Events;
+using Nop.Web.Framework.Infrastructure;
 using Nop.Web.Framework.Menu;
 
+
 namespace Nop.Plugin.Misc.Suppliers;
-public class SuppliersPlugin : BasePlugin
+public class SuppliersPlugin : BasePlugin, IWidgetPlugin
 {
 
     protected readonly ILocalizationService _localizationService;
@@ -18,6 +21,18 @@ public class SuppliersPlugin : BasePlugin
     }
 
 
+
+
+    public bool HideInWidgetList => false;
+    public Type GetWidgetViewComponent(string widgetZone)
+    {
+        return typeof(Components.ProductSuppliersWidgetViewComponent);
+    }
+
+    public Task<IList<string>> GetWidgetZonesAsync()
+    {
+        return Task.FromResult<IList<string>>(new List<string> { AdminWidgetZones.ProductDetailsBlock });
+    }
 
 
     public override async Task InstallAsync()
