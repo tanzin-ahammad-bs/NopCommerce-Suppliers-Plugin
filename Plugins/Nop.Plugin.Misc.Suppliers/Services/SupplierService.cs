@@ -61,4 +61,11 @@ public class SupplierService : ISupplierService
 
 
 
+    public virtual async Task DeleteSupplierAsync(Supplier supplier)
+    {
+        await _supplierRepository.DeleteAsync(supplier);
+    }
+
+
+
 }

@@ -188,7 +188,7 @@ public class SuppliersController : BasePluginController
             //update picture seo file name
             /*await UpdatePictureSeoNamesAsync(supplier);*/
 
-            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Vendors.Added"));
+            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Suppliers.Added"));
 
             if (!continueEditing)
                 return RedirectToAction("List");
@@ -320,7 +320,7 @@ public class SuppliersController : BasePluginController
             //update picture seo file name
             //await UpdatePictureSeoNamesAsync(supplier);
 
-            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Vendors.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Suppliers.Updated"));
 
             if (!continueEditing)
                 return RedirectToAction("List");
@@ -333,6 +333,40 @@ public class SuppliersController : BasePluginController
 
         //if we got this far, something failed, redisplay form
         return View(model);
+    }
+
+
+
+    [AuthorizeAdmin]
+    [Area(AreaNames.ADMIN)]
+    [HttpPost]
+    //[CheckPermission(StandardPermission.Customers.VENDORS_CREATE_EDIT_DELETE)]
+
+    public virtual async Task<IActionResult> Delete(int id)
+    {
+        //try to get a vendor with the specified id
+        var supplier = await _supplierService.GetSupplierByIdAsync(id);
+        if (supplier == null)
+            return RedirectToAction("List");
+
+        //clear associated customer references
+        //var associatedCustomers = await _customerService.GetAllCustomersAsync(vendorId: vendor.Id);
+        //foreach (var customer in associatedCustomers)
+        //{
+        //    customer.VendorId = 0;
+        //    await _customerService.UpdateCustomerAsync(customer);
+        //}
+
+        //delete a vendor
+        await _supplierService.DeleteSupplierAsync(supplier);
+
+        //activity log
+        await _customerActivityService.InsertActivityAsync("DeleteVendor",
+            string.Format(await _localizationService.GetResourceAsync("ActivityLog.DeleteVendor"), supplier.Id), supplier);
+
+        _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Suppliers.Deleted"));
+
+        return RedirectToAction("List");
     }
 
 

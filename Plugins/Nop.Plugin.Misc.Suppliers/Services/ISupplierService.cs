@@ -17,4 +17,7 @@ public interface ISupplierService
     Task<Supplier> GetSupplierByIdAsync(int supplierId);
 
 
+    Task DeleteSupplierAsync(Supplier supplier);
+
+
 }

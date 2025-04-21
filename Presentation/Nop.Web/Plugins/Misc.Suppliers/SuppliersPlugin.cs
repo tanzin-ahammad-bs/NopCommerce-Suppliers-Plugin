@@ -50,7 +50,11 @@ public class SuppliersPlugin : BasePlugin
             ["admin.suppliers.addnew"] = "Add a new supplier",
             ["admin.suppliers.backtolist"] = "back to supplier list",
             ["Admin.Suppliers.info"] = "Supplier Info",
-            ["Admin.suppliers.editsupplierdetails"] = "Edit supplier details"
+            ["Admin.suppliers.editsupplierdetails"] = "Edit supplier details",
+            ["Admin.Suppliers.Added"] = "The new supplier has been added successfully.",
+            ["Admin.Suppliers.Updated"] = "The supplier has been updated successfully.",
+            ["Admin.Suppliers.Deleted"] = "The supplier has been deleted successfully."
+
         });
 
 
