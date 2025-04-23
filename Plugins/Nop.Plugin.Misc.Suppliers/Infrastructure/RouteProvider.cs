@@ -15,8 +15,13 @@ public class RouteProvider : IRouteProvider
 
     public void RegisterRoutes(IEndpointRouteBuilder endpointRouteBuilder)
     {
-        //endpointRouteBuilder.MapControllerRoute(name: SuppliersDefault.ListRouteName,
-        //    pattern: "Admin/Suppliers/List",
-        //    defaults: new { controller = "Suppliers", action = "List", area = AreaNames.ADMIN });
+        endpointRouteBuilder.MapControllerRoute(name: SuppliersDefault.ListRouteName,
+            pattern: "Admin/Suppliers/List",
+            defaults: new { controller = "Suppliers", action = "List", area = AreaNames.ADMIN });
+        
+        endpointRouteBuilder.MapControllerRoute(name: SuppliersDefault.SupplierToProductRouteName,
+            pattern: "/Admin/Suppliers/AssignSupplierToProduct",
+            defaults: new { controller = "Suppliers", action = "AssignSupplierToProduct", area = AreaNames.ADMIN });
+        
     }
 }

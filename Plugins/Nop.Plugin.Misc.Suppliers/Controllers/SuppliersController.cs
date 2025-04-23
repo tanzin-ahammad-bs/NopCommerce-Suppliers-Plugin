@@ -26,6 +26,12 @@ using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Plugin.Misc.Suppliers.Controllers;
+
+
+[AuthorizeAdmin]
+[Area(AreaNames.ADMIN)]
+
+
 public class SuppliersController : BasePluginController
 {
     #region Fields
@@ -92,8 +98,7 @@ public class SuppliersController : BasePluginController
 
     #region Methods
 
-    [AuthorizeAdmin]
-    [Area(AreaNames.ADMIN)]
+    
     public virtual async Task<IActionResult> List()
     {
         //prepare model
@@ -102,8 +107,7 @@ public class SuppliersController : BasePluginController
         return View("~/Plugins/Misc.Suppliers/Views/Suppliers/List.cshtml", model);
     }
 
-    [AuthorizeAdmin]
-    [Area(AreaNames.ADMIN)]
+    
     [HttpPost]
     public virtual async Task<IActionResult> List(SuppliersSearchModel searchModel)
     {
@@ -116,13 +120,6 @@ public class SuppliersController : BasePluginController
 
 
 
-
-
-
-
-
-    [AuthorizeAdmin]
-    [Area(AreaNames.ADMIN)]
     public virtual async Task<IActionResult> Create()
     {
         //prepare model
@@ -137,8 +134,7 @@ public class SuppliersController : BasePluginController
 
 
 
-    [AuthorizeAdmin]
-    [Area(AreaNames.ADMIN)]
+    
     [HttpPost]
     public virtual async Task<IActionResult> Create(SupplierModel model, bool continueEditing, IFormCollection form)
     {
@@ -209,8 +205,7 @@ public class SuppliersController : BasePluginController
 
 
 
-    [AuthorizeAdmin]
-    [Area(AreaNames.ADMIN)]
+    
     public virtual async Task<IActionResult> Edit(int id)
     {
         //try to get a vendor with the specified id
@@ -231,8 +226,7 @@ public class SuppliersController : BasePluginController
 
 
 
-    [AuthorizeAdmin]
-    [Area(AreaNames.ADMIN)]
+    
     [HttpPost]
     public virtual async Task<IActionResult> Edit(SupplierModel model, bool continueEditing, IFormCollection form)
     {
@@ -337,9 +331,8 @@ public class SuppliersController : BasePluginController
     }
 
 
-
-    [AuthorizeAdmin]
-    [Area(AreaNames.ADMIN)]
+    
+    
     [HttpPost]
     //[CheckPermission(StandardPermission.Customers.VENDORS_CREATE_EDIT_DELETE)]
 
@@ -374,28 +367,19 @@ public class SuppliersController : BasePluginController
 
 
 
+    [HttpPost]
+    public async Task<IActionResult> AssignSupplierToProduct(int productId, int supplierId)
+    {
+        if (productId == 0 || supplierId == 0)
+            return await Task.FromResult<IActionResult>(Json(new { success = false, message = "Invalid product or supplier ID" }));
 
+        await _supplierService.InsertOrUpdateProductSupplierMappingAsync(productId, supplierId);
 
-    [AuthorizeAdmin]
-    [Area(AreaNames.ADMIN)]
-    
-    [AutoValidateAntiforgeryToken]
-    
-        [HttpPost]
-        public Task<IActionResult> AssignSupplier(int productId, int supplierId)
-        {
-        // TODO: Save this mapping (you can use a custom entity or generic attributes)
-        // Example: await _genericAttributeService.SaveAttributeAsync(product, "SelectedSupplierId", supplierId);
-
-        // Just return to the product edit page
+        return await Task.FromResult<IActionResult>(Json(new { success = true, message = "Supplier added to product successfully." }));
+    }
 
 
 
-        _notificationService.SuccessNotification($"Assigned Supplier ID {supplierId} to Product ID {productId}");
-
-        return Task.FromResult<IActionResult>(RedirectToAction("Edit", "Product", new { id = productId }));
-        }
-    
 
 
 

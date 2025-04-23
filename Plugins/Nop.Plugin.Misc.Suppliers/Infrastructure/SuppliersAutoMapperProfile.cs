@@ -14,6 +14,10 @@ namespace Nop.Plugin.Misc.Suppliers.Infrastructure
             // Map from entity to model and vice versa
             CreateMap<Supplier, SupplierModel>();
             CreateMap<SupplierModel, Supplier>();
+            CreateMap<ProductSupplierMapping, SupplierProductModel>();
+            CreateMap<SupplierProductModel, ProductSupplierMapping>();
+
+            
         }
     }
 }

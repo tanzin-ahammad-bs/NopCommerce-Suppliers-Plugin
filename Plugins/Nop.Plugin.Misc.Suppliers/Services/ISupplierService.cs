@@ -20,4 +20,7 @@ public interface ISupplierService
     Task DeleteSupplierAsync(Supplier supplier);
 
 
+    Task InsertOrUpdateProductSupplierMappingAsync(int productId, int supplierId);
+
+
 }

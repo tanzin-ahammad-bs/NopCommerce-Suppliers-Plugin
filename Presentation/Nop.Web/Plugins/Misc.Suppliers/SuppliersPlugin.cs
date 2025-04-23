@@ -96,7 +96,7 @@ public class SuppliersPlugin : BasePlugin, IWidgetPlugin
             if (!await _permissionService.AuthorizeAsync(StandardPermission.Configuration.MANAGE_PLUGINS))
                 return;
 
-            eventMessage.RootMenuItem.InsertBefore("Local plugins",
+            eventMessage.RootMenuItem.InsertAfter("Help",
                 new AdminMenuItem
                 {
                     SystemName = "Misc.Suppliers", 

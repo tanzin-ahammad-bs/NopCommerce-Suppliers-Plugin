@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Nop.Plugin.Misc.Suppliers.Models;
 using Nop.Plugin.Misc.Suppliers.Services;
+using Nop.Web.Areas.Admin.Models.Catalog;
 using Nop.Web.Framework.Components;
 
 namespace Nop.Plugin.Misc.Suppliers.Components;
@@ -20,27 +22,32 @@ public class ProductSuppliersWidgetViewComponent : NopViewComponent
 
 
 
+
     public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
     {
-        var suppliers = await _supplierService.GetAllSuppliersAsync();
+        var productModel = additionalData as ProductModel;
 
-        var supplierList = suppliers.Select(s => new SelectListItem
+        if (productModel == null || productModel.Id == 0)
+            return Content(string.Empty);
+
+        var suppliers = await _supplierService.GetAllSuppliersAsync();
+        var selectList = suppliers.Select(s => new SelectListItem
         {
             Text = s.Name,
             Value = s.Id.ToString()
         }).ToList();
 
-        // Extract ProductId from additionalData (typically a ProductModel)
-        int productId = 0;
-        if (additionalData != null && additionalData.GetType().GetProperty("Id") != null)
+        var model = new SupplierProductModel
         {
-            productId = (int)(additionalData.GetType().GetProperty("Id")?.GetValue(additionalData) ?? 0);
-        }
+            ProductId = productModel.Id,
+            SupplierId = 0,
+            Suppliers = selectList
+        };
 
-        ViewBag.ProductId = productId;
-
-        return View("~/Plugins/Misc.Suppliers/Views/Suppliers/_ProductSupplierDropdown.cshtml", supplierList);
+        return View("~/Plugins/Misc.Suppliers/Views/Suppliers/ProductSupplierEdit.cshtml", model);
     }
+
+
 
 
 

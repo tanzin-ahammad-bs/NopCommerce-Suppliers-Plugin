@@ -12,10 +12,12 @@ namespace Nop.Plugin.Misc.Suppliers.Services;
 public class SupplierService : ISupplierService
 {
     protected readonly IRepository<Supplier> _supplierRepository;
+    protected readonly IRepository<ProductSupplierMapping> _productsuppliermappingRepository;
 
-    public SupplierService(IRepository<Supplier> supplierRepository)
+    public SupplierService(IRepository<Supplier> supplierRepository, IRepository<ProductSupplierMapping> productsuppliermappingRepository)
     {
         _supplierRepository = supplierRepository;
+        _productsuppliermappingRepository = productsuppliermappingRepository;
     }
     public virtual async Task<IPagedList<Supplier>> GetAllSuppliersAsync(string name = "", string email = "", int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
     {
@@ -65,6 +67,32 @@ public class SupplierService : ISupplierService
     {
         await _supplierRepository.DeleteAsync(supplier);
     }
+
+
+
+    //Insert Or Update into ProductSupplierMapping
+    public async Task InsertOrUpdateProductSupplierMappingAsync(int productId, int supplierId)
+    {
+        var existing = await _productsuppliermappingRepository.Table
+            .FirstOrDefaultAsync(x => x.ProductId == productId);
+
+        if (existing != null)
+        {
+            existing.SupplierId = supplierId;
+            await _productsuppliermappingRepository.UpdateAsync(existing);
+        }
+        else
+        {
+            var newMapping = new ProductSupplierMapping
+            {
+                ProductId = productId,
+                SupplierId = supplierId
+            };
+            await _productsuppliermappingRepository.InsertAsync(newMapping);
+        }
+    }
+
+
 
 
 
