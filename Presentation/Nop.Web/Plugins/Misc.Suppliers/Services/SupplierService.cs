@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Nop.Core.Domain.Vendors;
-using Nop.Core;
+﻿using Nop.Core;
 using Nop.Data;
 using Nop.Plugin.Misc.Suppliers.Domain;
 
@@ -41,9 +35,6 @@ public class SupplierService : ISupplierService
         return suppliers;
     }
 
-
-
-
     public virtual async Task InsertSupplierAsync(Supplier supplier)
     {
         await _supplierRepository.InsertAsync(supplier);
@@ -54,21 +45,15 @@ public class SupplierService : ISupplierService
         await _supplierRepository.UpdateAsync(supplier);
     }
 
-
-
     public virtual async Task<Supplier> GetSupplierByIdAsync(int supplierId)
     {
         return await _supplierRepository.GetByIdAsync(supplierId, cache => default);
     }
 
-
-
     public virtual async Task DeleteSupplierAsync(Supplier supplier)
     {
         await _supplierRepository.DeleteAsync(supplier);
     }
-
-
 
     //Insert Or Update into ProductSupplierMapping
     public async Task InsertOrUpdateProductSupplierMappingAsync(int productId, int supplierId)
@@ -91,9 +76,5 @@ public class SupplierService : ISupplierService
             await _productsuppliermappingRepository.InsertAsync(newMapping);
         }
     }
-
-
-
-
 
 }

@@ -1,25 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Nop.Core.Domain.Directory;
+﻿using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Vendors;
 using Nop.Plugin.Misc.Suppliers.Domain;
 using Nop.Plugin.Misc.Suppliers.Models;
 using Nop.Plugin.Misc.Suppliers.Services;
 using Nop.Services.Attributes;
-using Nop.Services.Catalog;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
 using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Seo;
-using Nop.Services.Vendors;
 using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
-using Nop.Web.Areas.Admin.Models.Vendors;
 using Nop.Web.Framework.Factories;
 using Nop.Web.Framework.Models.Extensions;
 using SupplierLocalizedModel = Nop.Plugin.Misc.Suppliers.Models.SupplierLocalizedModel;
@@ -113,13 +105,6 @@ public class SuppliersModelFactory : ISuppliersModelFactory
         return Task.FromResult(searchModel);
     }
 
-
-
-
-
-
-
-
     public virtual async Task<SupplierModel> PrepareSupplierModelAsync(SupplierModel model, Supplier supplier, bool excludeProperties = false)
     {
         Func<SupplierLocalizedModel, int, Task> localizedModelConfiguration = null;
@@ -188,5 +173,4 @@ public class SuppliersModelFactory : ISuppliersModelFactory
         return model;
     }
 
-    
 }

@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using Nop.Services.Cms;
+﻿using Nop.Services.Cms;
 using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Plugins;
@@ -19,10 +18,6 @@ public class SuppliersPlugin : BasePlugin, IWidgetPlugin
     {
         _localizationService = localizationService;
     }
-
-
-
-
     public bool HideInWidgetList => false;
     public Type GetWidgetViewComponent(string widgetZone)
     {
@@ -33,12 +28,8 @@ public class SuppliersPlugin : BasePlugin, IWidgetPlugin
     {
         return Task.FromResult<IList<string>>(new List<string> { AdminWidgetZones.ProductDetailsBlock });
     }
-
-
     public override async Task InstallAsync()
     {
-
-       
         await base.InstallAsync();
     }
 
@@ -46,11 +37,6 @@ public class SuppliersPlugin : BasePlugin, IWidgetPlugin
     {
         await base.UninstallAsync();
     }
-
-
-
-
-
     public override async Task UpdateAsync(string currentVersion, string targetVersion)
     {
 
@@ -72,15 +58,8 @@ public class SuppliersPlugin : BasePlugin, IWidgetPlugin
 
         });
 
-
         await base.UpdateAsync(currentVersion, targetVersion);
     }
-
-
-
-
-
-
 
     public class EventConsumer : IConsumer<AdminMenuCreatedEvent>
     {
@@ -107,4 +86,5 @@ public class SuppliersPlugin : BasePlugin, IWidgetPlugin
                 });
         }
     }
+
 }

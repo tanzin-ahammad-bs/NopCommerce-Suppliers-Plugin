@@ -16,7 +16,6 @@ namespace Nop.Plugin.Misc.Suppliers.Infrastructure
             CreateMap<SupplierModel, Supplier>();
             CreateMap<ProductSupplierMapping, SupplierProductModel>();
             CreateMap<SupplierProductModel, ProductSupplierMapping>();
-
             
         }
     }

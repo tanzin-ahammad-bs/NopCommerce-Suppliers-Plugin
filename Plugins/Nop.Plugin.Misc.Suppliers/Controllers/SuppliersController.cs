@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2016.Drawing.Charts;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Common;
@@ -18,9 +17,7 @@ using Nop.Services.Media;
 using Nop.Services.Messages;
 using Nop.Services.Security;
 using Nop.Services.Seo;
-using Nop.Services.Vendors;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
-using Nop.Web.Areas.Admin.Models.Vendors;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
@@ -97,7 +94,6 @@ public class SuppliersController : BasePluginController
     #endregion
 
     #region Methods
-
     
     public virtual async Task<IActionResult> List()
     {
@@ -106,7 +102,6 @@ public class SuppliersController : BasePluginController
 
         return View("~/Plugins/Misc.Suppliers/Views/Suppliers/List.cshtml", model);
     }
-
     
     [HttpPost]
     public virtual async Task<IActionResult> List(SuppliersSearchModel searchModel)
@@ -117,9 +112,6 @@ public class SuppliersController : BasePluginController
         return Json(model);
     }
 
-
-
-
     public virtual async Task<IActionResult> Create()
     {
         //prepare model
@@ -128,13 +120,6 @@ public class SuppliersController : BasePluginController
         return View("~/Plugins/Misc.Suppliers/Views/Suppliers/Create.cshtml", model);
     }
 
-
-
-
-
-
-
-    
     [HttpPost]
     public virtual async Task<IActionResult> Create(SupplierModel model, bool continueEditing, IFormCollection form)
     {
@@ -200,12 +185,6 @@ public class SuppliersController : BasePluginController
         return View(model);
     }
 
-
-
-
-
-
-    
     public virtual async Task<IActionResult> Edit(int id)
     {
         //try to get a vendor with the specified id
@@ -223,9 +202,6 @@ public class SuppliersController : BasePluginController
 
         return View("~/Plugins/Misc.Suppliers/Views/Suppliers/Edit.cshtml", model);
     }
-
-
-
     
     [HttpPost]
     public virtual async Task<IActionResult> Edit(SupplierModel model, bool continueEditing, IFormCollection form)
@@ -329,9 +305,6 @@ public class SuppliersController : BasePluginController
         //if we got this far, something failed, redisplay form
         return View(model);
     }
-
-
-    
     
     [HttpPost]
     //[CheckPermission(StandardPermission.Customers.VENDORS_CREATE_EDIT_DELETE)]
@@ -363,10 +336,6 @@ public class SuppliersController : BasePluginController
         return RedirectToAction("List");
     }
 
-
-
-
-
     [HttpPost]
     public async Task<IActionResult> AssignSupplierToProduct(int productId, int supplierId)
     {
@@ -377,15 +346,6 @@ public class SuppliersController : BasePluginController
 
         return await Task.FromResult<IActionResult>(Json(new { success = true, message = "Supplier added to product successfully." }));
     }
-
-
-
-
-
-
-
-
-
 
     #endregion
 }

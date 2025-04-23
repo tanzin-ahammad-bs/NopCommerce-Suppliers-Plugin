@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentValidation;
-using Nop.Core.Domain.Vendors;
+﻿using FluentValidation;
 using Nop.Plugin.Misc.Suppliers.Domain;
 using Nop.Plugin.Misc.Suppliers.Models;
 using Nop.Services.Localization;
-using Nop.Services.Seo;
-using Nop.Web.Areas.Admin.Validators;
 using Nop.Web.Framework.Validators;
 
 namespace Nop.Plugin.Misc.Suppliers.Validators;

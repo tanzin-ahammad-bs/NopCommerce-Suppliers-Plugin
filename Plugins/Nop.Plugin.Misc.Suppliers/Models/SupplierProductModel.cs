@@ -2,15 +2,9 @@
 using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
-
 namespace Nop.Plugin.Misc.Suppliers.Models;
-
-
-
 public partial record SupplierProductModel : BaseNopModel
 {
-    
-
     [NopResourceDisplayName("Plugins.Misc.Suppliers.Fields.ProductId")]
     public int ProductId { get; set; }
 
