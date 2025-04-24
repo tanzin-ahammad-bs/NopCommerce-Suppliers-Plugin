@@ -1,4 +1,5 @@
-﻿using Nop.Services.Cms;
+﻿using Nop.Plugin.Misc.Suppliers.Areas.Admin.Components;
+using Nop.Services.Cms;
 using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Plugins;
@@ -21,7 +22,7 @@ public class SuppliersPlugin : BasePlugin, IWidgetPlugin
     public bool HideInWidgetList => false;
     public Type GetWidgetViewComponent(string widgetZone)
     {
-        return typeof(Components.ProductSuppliersWidgetViewComponent);
+        return typeof(ProductSuppliersWidgetViewComponent);
     }
 
     public Task<IList<string>> GetWidgetZonesAsync()
@@ -37,6 +38,8 @@ public class SuppliersPlugin : BasePlugin, IWidgetPlugin
     {
         await base.UninstallAsync();
     }
+
+
     public override async Task UpdateAsync(string currentVersion, string targetVersion)
     {
 

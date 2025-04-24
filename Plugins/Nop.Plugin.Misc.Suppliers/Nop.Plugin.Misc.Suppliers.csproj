@@ -27,8 +27,8 @@
   <ItemGroup>
     <None Remove="logo.png" />
     <None Remove="plugin.json" />
-    <None Remove="Views\Suppliers\List.cshtml" />
-    <None Remove="Views\_ViewImports.cshtml" />
+    <None Remove="Areas\Admin\Views\Suppliers\List.cshtml" />
+    <None Remove="Areas\Admin\Views\_ViewImports.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,34 +38,34 @@
     <Content Include="plugin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Suppliers\Create.cshtml">
+    <Content Include="Areas\Admin\Views\Suppliers\Create.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Suppliers\Edit.cshtml">
+    <Content Include="Areas\Admin\Views\Suppliers\Edit.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Suppliers\List.cshtml">
+    <Content Include="Areas\Admin\Views\Suppliers\List.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Suppliers\_CreateOrUpdate.cshtml">
+    <Content Include="Areas\Admin\Views\Suppliers\_CreateOrUpdate.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Suppliers\_CreateOrUpdate.Info.cshtml">
+    <Content Include="Areas\Admin\Views\Suppliers\_CreateOrUpdate.Info.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Suppliers\_CreateOrUpdate.Seo.cshtml">
+    <Content Include="Areas\Admin\Views\Suppliers\_CreateOrUpdate.Seo.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="Views\_ViewImports.cshtml">
+    <Content Include="Areas\Admin\Views\_ViewImports.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -76,31 +76,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Components\ProductSuppliersWidgetViewComponent.cs">
+    <Compile Update="Areas\Admin\Components\ProductSuppliersWidgetViewComponent.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Controllers\SuppliersController.cs">
+    <Compile Update="Areas\Admin\Controllers\SuppliersController.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Data\SchemaMigration.cs">
+    <Compile Update="Areas\Admin\Data\SchemaMigration.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Domain\Supplier.cs">
+    <Compile Update="Areas\Admin\Domain\Supplier.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Factories\ISuppliersModelFactory.cs">
+    <Compile Update="Areas\Admin\Factories\ISuppliersModelFactory.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Infrastructure\RouteProvider.cs">
+    <Compile Update="Areas\Admin\Infrastructure\RouteProvider.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Infrastructure\SuppliersAutoMapperProfile.cs">
+    <Compile Update="Areas\Admin\Infrastructure\SuppliersAutoMapperProfile.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Models\SupplierModel.cs">
+    <Compile Update="Areas\Admin\Models\SupplierModel.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Services\SupplierService.cs">
+    <Compile Update="Areas\Admin\Services\SupplierService.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="SuppliersPlugin.cs">
@@ -109,10 +109,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Views\Suppliers\ProductSupplierAdd.cshtml">
+    <None Update="Areas\Admin\Views\Suppliers\ProductSupplierAdd.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Views\Suppliers\ProductSupplierEdit.cshtml">
+    <None Update="Areas\Admin\Views\Suppliers\ProductSupplierEdit.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
