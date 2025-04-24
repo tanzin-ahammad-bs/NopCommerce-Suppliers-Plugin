@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Razor;
-using Nop.Core.Infrastructure;
-using Nop.Web.Framework.Themes;
 namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Infrastructure;
 public class ViewLocationExpander : IViewLocationExpander
 {
