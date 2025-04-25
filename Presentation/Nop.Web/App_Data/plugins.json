@@ -44,14 +44,6 @@
       "Version": "4.80.6"
     },
     {
-      "SystemName": "MultiFactorAuth.GoogleAuthenticator",
-      "Version": "4.80.4"
-    },
-    {
-      "SystemName": "Payments.AmazonPay",
-      "Version": "4.80.8"
-    },
-    {
       "SystemName": "Payments.CheckMoneyOrder",
       "Version": "4.80.3"
     },
@@ -72,20 +64,8 @@
       "Version": "4.80.4"
     },
     {
-      "SystemName": "Shipping.UPS",
-      "Version": "4.80.5"
-    },
-    {
-      "SystemName": "Tax.Avalara",
-      "Version": "4.80.7"
-    },
-    {
       "SystemName": "Tax.FixedOrByCountryStateZip",
       "Version": "4.80.3"
-    },
-    {
-      "SystemName": "Widgets.FacebookPixel",
-      "Version": "4.80.4"
     },
     {
       "SystemName": "Widgets.GoogleAnalytics",
@@ -94,17 +74,21 @@
     {
       "SystemName": "Widgets.Swiper",
       "Version": "4.80.1"
-    },
-    {
-      "SystemName": "ExternalAuth.Facebook",
-      "Version": "4.80.5"
-    },
-    {
-      "SystemName": "Misc.Suppliers",
-      "Version": "1.5"
     }
   ],
   "PluginNamesToUninstall": [],
-  "PluginNamesToDelete": [],
-  "PluginNamesToInstall": []
+  "PluginNamesToDelete": [
+    "ExternalAuth.Facebook",
+    "MultiFactorAuth.GoogleAuthenticator",
+    "Payments.AmazonPay",
+    "Shipping.UPS",
+    "Tax.Avalara",
+    "Widgets.FacebookPixel"
+  ],
+  "PluginNamesToInstall": [
+    {
+      "Item1": "Misc.Suppliers",
+      "Item2": "53791c70-cc57-4297-8e06-ed1f4ec47201"
+    }
+  ]
 }

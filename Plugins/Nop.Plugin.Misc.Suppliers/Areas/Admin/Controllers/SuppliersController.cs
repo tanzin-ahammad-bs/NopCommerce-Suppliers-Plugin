@@ -20,6 +20,7 @@ using Nop.Services.Seo;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
+using Nop.Web.Framework.Factories;
 using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers;
@@ -50,6 +51,7 @@ public class SuppliersController : BasePluginController
     protected readonly ISuppliersModelFactory _suppliersModelFactory;
     protected readonly ISupplierService _supplierService;
     private static readonly char[] _separator = [','];
+    protected readonly ILocalizedModelFactory _localizedModelFactory;
 
 
     #endregion
@@ -71,7 +73,7 @@ public class SuppliersController : BasePluginController
         IPictureService pictureService,
         IUrlRecordService urlRecordService,
         ISuppliersModelFactory suppliersModelFactory,
-        ISupplierService supplierService)
+        ISupplierService supplierService, ILocalizedModelFactory localizedModelFactory)
     {
         _forumSettings = forumSettings;
         _addressService = addressService;
@@ -89,6 +91,7 @@ public class SuppliersController : BasePluginController
         _urlRecordService = urlRecordService;
         _suppliersModelFactory = suppliersModelFactory;
         _supplierService = supplierService;
+        _localizedModelFactory = localizedModelFactory;
     }
 
     #endregion
@@ -116,6 +119,14 @@ public class SuppliersController : BasePluginController
     {
         //prepare model
         var model = await _suppliersModelFactory.PrepareSupplierModelAsync(new SupplierModel(), null);
+
+        //localization
+        model.Locales = await _localizedModelFactory.PrepareLocalizedModelsAsync<SupplierLocalizedModel>(
+                async (locale, languageId) =>
+                {
+                    locale.LanguageId = languageId;
+                    await Task.CompletedTask;
+                });
 
         return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/Create.cshtml", model);
     }
@@ -165,7 +176,7 @@ public class SuppliersController : BasePluginController
             //await _genericAttributeService.SaveAttributeAsync(vendor, NopVendorDefaults.VendorAttributes, vendorAttributesXml);
 
             //locales
-            //await UpdateLocalesAsync(supplier, model);
+            await UpdateLocalesAsync(supplier, model);
 
             //update picture seo file name
             /*await UpdatePictureSeoNamesAsync(supplier);*/
@@ -185,6 +196,29 @@ public class SuppliersController : BasePluginController
         return View(model);
     }
 
+
+    protected virtual async Task UpdateLocalesAsync(Supplier productSupplierEntity, SupplierModel model)
+    {
+        foreach (var localized in model.Locales)
+        {
+            await _localizedEntityService.SaveLocalizedValueAsync(productSupplierEntity,
+                x => x.Name,
+                localized.Name,
+                localized.LanguageId);
+
+            await _localizedEntityService.SaveLocalizedValueAsync(productSupplierEntity,
+                x => x.Description,
+                localized.Description,
+                localized.LanguageId);
+
+           
+
+            var seName = await _urlRecordService.ValidateSeNameAsync(productSupplierEntity, localized.SeName, localized.Name, false);
+            await _urlRecordService.SaveSlugAsync(productSupplierEntity, seName, localized.LanguageId);
+        }
+    }
+
+
     public virtual async Task<IActionResult> Edit(int id)
     {
         //try to get a vendor with the specified id
@@ -199,6 +233,16 @@ public class SuppliersController : BasePluginController
 
         //if (!_forumSettings.AllowPrivateMessages && model.PmCustomerId > 0)
         //    _notificationService.WarningNotification("Private messages are disabled. Do not forget to enable them.");
+
+        model.Locales = await _localizedModelFactory.PrepareLocalizedModelsAsync<SupplierLocalizedModel>(
+            async (locale, languageId) =>
+            {
+                locale.LanguageId = languageId;
+                locale.Name = await _localizationService.GetLocalizedAsync(supplier, x => x.Name, languageId, false, false);
+                locale.Description = await _localizationService.GetLocalizedAsync(supplier, x => x.Description, languageId, false, false);
+
+            });
+
 
         return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/Edit.cshtml", model);
     }

@@ -61,10 +61,14 @@ public class Supplier : BaseEntity, ILocalizedEntity, ISlugSupported
     ///// </summary>
     //public string? MetaDescription { get; set; }
 
-    ///// <summary>
-    ///// Gets or sets the meta title
-    ///// </summary>
+    /////// <summary>
+    /////// Gets or sets the meta title
+    /////// </summary>
     //public string? MetaTitle { get; set; }
+
+
+
+
 
     ///// <summary>
     ///// Gets or sets the page size

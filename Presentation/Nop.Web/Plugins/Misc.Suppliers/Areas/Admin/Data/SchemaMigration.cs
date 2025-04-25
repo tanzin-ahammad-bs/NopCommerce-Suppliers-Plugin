@@ -3,7 +3,7 @@ using Nop.Data.Extensions;
 using Nop.Data.Migrations;
 using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
 
-[NopMigration("2025/04/14 10:00:05", "Misc.Suppliers base schema", MigrationProcessType.Installation)]
+[NopMigration("2025/04/14 10:00:11", "Misc.Suppliers base schema", MigrationProcessType.Installation)]
 public class SchemaMigration : AutoReversingMigration
 {
     public override void Up()
@@ -12,3 +12,5 @@ public class SchemaMigration : AutoReversingMigration
         Create.TableFor<ProductSupplierMapping>();
     }
 }
+
+

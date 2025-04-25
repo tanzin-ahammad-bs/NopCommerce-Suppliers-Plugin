@@ -2,10 +2,10 @@
 namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Infrastructure;
 public class ViewLocationExpander : IViewLocationExpander
 {
-    
+
     public void PopulateValues(ViewLocationExpanderContext context)
     {
-       
+
     }
     public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
     {

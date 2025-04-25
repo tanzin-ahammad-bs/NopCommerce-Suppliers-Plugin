@@ -57,7 +57,7 @@ public partial record SupplierModel : BaseNopEntityModel, ILocalizedModel<Suppli
     //[NopResourceDisplayName("Admin.Vendors.Fields.MetaDescription")]
     //public string MetaDescription { get; set; }
 
-    //[NopResourceDisplayName("Admin.Vendors.Fields.MetaTitle")]
+    ////[NopResourceDisplayName("Admin.Vendors.Fields.MetaTitle")]
     //public string MetaTitle { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.Fields.SeName")]
