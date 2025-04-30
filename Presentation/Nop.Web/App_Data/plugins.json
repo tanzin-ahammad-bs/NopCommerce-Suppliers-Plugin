@@ -74,6 +74,14 @@
     {
       "SystemName": "Widgets.Swiper",
       "Version": "4.80.1"
+    },
+    {
+      "SystemName": "Misc.PurchaseOrder",
+      "Version": "5.00"
+    },
+    {
+      "SystemName": "Misc.Suppliers",
+      "Version": "1.6"
     }
   ],
   "PluginNamesToUninstall": [],
@@ -85,10 +93,5 @@
     "Tax.Avalara",
     "Widgets.FacebookPixel"
   ],
-  "PluginNamesToInstall": [
-    {
-      "Item1": "Misc.Suppliers",
-      "Item2": "53791c70-cc57-4297-8e06-ed1f4ec47201"
-    }
-  ]
+  "PluginNamesToInstall": []
 }

@@ -1,0 +1,14 @@
+﻿using Nop.Web.Framework.Models;
+using System;
+
+namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Models
+{
+    public partial record class PurchaseOrderModel : BaseNopEntityModel
+    {
+        public int PurchaseOrderId { get; set; }
+        public string SupplierName { get; set; }
+        public DateTime CreationDate { get; set; }
+        public decimal TotalAmount { get; set; }
+        public string CreatedBy { get; set; }
+    }
+}

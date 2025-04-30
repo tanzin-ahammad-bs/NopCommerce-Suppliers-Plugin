@@ -1,0 +1,123 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Copyright>Copyright © Nop Solutions, Ltd</Copyright>
+		<Company>Nop Solutions, Ltd</Company>
+		<Authors>Nop Solutions, Ltd</Authors>
+		<PackageLicenseUrl></PackageLicenseUrl>
+		<PackageProjectUrl>https://www.nopcommerce.com/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/nopSolutions/nopCommerce</RepositoryUrl>
+		<RepositoryType>Git</RepositoryType>
+		<OutputPath>$(SolutionDir)\Presentation\Nop.Web\Plugins\Misc.PurchaseOrder</OutputPath>
+		<OutDir>$(OutputPath)</OutDir>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+
+
+
+
+
+	<ItemGroup>
+		<Content Include="logo.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="plugin.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ClearPluginAssemblies Include="$(SolutionDir)\Build\ClearPluginAssemblies.proj" />
+		<ProjectReference Include="..\..\Presentation\Nop.Web.Framework\Nop.Web.Framework.csproj" />
+		<ProjectReference Include="..\Nop.Plugin.Misc.Suppliers\Nop.Plugin.Misc.Suppliers.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Areas\Admin\Controllers\PurchaseOrderController.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Data\SchemaMigration.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Domain\PurchaseOrderList.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Domain\SupplierProductMapping.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Factories\IPurchaseOrderModelFactory.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Factories\PurchaseOrderModelFactory.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Infrastructure\NopStartup.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Infrastructure\PurchaseOrderAutoMapperProfile.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Models\AddProductPopupModel.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Models\PurchaseOrderListModel.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Models\PurchaseOrderModel.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Models\PurchaseOrderSearchModel.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Models\SaveProductPopupRequestModel.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Models\SelectedProductModel.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Services\IPurchaseOrderService.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Services\ISupplierProductMappingService.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Services\PurchaseOrderService.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Services\SelectedProductService.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Services\SupplierProductMappingService.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="PurchaseOrderPlugin.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Areas\Admin\Views\PurchaseOrder\AddProductPopup.cshtml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Areas\Admin\Views\PurchaseOrder\AddProducts.cshtml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Areas\Admin\Views\PurchaseOrder\PurchaseList.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Areas\Admin\Views\PurchaseOrder\_ProductList.cshtml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Areas\Admin\Views\_ViewImports.cshtml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<Target Name="NopTarget" AfterTargets="Build">
+		<MSBuild Projects="@(ClearPluginAssemblies)" Properties="PluginPath=$(OutDir)" Targets="NopClear" />
+	</Target>
+
+</Project>

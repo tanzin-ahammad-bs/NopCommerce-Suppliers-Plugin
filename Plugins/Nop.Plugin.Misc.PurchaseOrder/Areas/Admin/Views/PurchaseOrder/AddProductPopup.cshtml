@@ -1,0 +1,90 @@
+@model List<Nop.Plugin.Misc.Suppliers.Areas.Admin.Models.AddProductPopupModel>
+
+@{
+    Layout = "_AdminPopupLayout";
+    ViewBag.PageTitle = T("Admin.Catalog.Products.RelatedProducts.AddNew").Text;
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-default">
+            <div class="card-body">
+                <form id="saveSelectedProductsForm" method="post">
+                    <input type="hidden" id="supplierId" value="@ViewBag.SupplierId" />
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" /></th>
+                                <th>@T("Admin.Catalog.Products.Fields.Name").Text</th>
+                                <th>@T("Admin.Catalog.Products.Fields.Published").Text</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="selectedProducts" value="@product.ProductId" />
+                                    </td>
+                                    <td>@product.ProductName</td>
+                                    <td>@(product.Published ? T("Admin.Common.Yes").Text : T("Admin.Common.No").Text)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-primary" id="saveSelectedProductsBtn">
+                    <i class="far fa-floppy-disk"></i> @T("Admin.Common.Save")
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="window.close();">
+                    @T("Admin.Common.Close")
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $('#selectAll').click(function () {
+            $('input[name="selectedProducts"]').prop('checked', this.checked);
+        });
+
+        $('#saveSelectedProductsBtn').click(function () {
+            var selectedProductIds = [];
+            $('input[name="selectedProducts"]:checked').each(function () {
+                selectedProductIds.push(parseInt($(this).val()));
+            });
+
+            if (selectedProductIds.length === 0) {
+                alert('Please select at least one product.');
+                return;
+            }
+
+            var supplierId = parseInt($('#supplierId').val());
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveSelectedProductsFromPopup", "PurchaseOrder")',
+                data: JSON.stringify({
+                    supplierId: supplierId,
+                    selectedProductIds: selectedProductIds
+                }),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    if (response.success && response.redirectUrl) {
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        alert(response.message || "Unexpected error.");
+                    }
+                },
+                error: function () {
+                    alert('Error while saving products.');
+                }
+            });
+        });
+    });
+</script>
