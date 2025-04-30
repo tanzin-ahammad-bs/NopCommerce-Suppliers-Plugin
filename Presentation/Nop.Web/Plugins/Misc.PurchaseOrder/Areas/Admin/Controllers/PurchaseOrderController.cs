@@ -2,14 +2,16 @@
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Models;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Factories;
 using Nop.Data;
 using Nop.Plugin.Misc.Suppliers.Areas.Admin.Services;
 using Nop.Services.Catalog;
 using Nop.Core.Domain.Catalog;
 using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Factories;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services;
+using Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Services;
 
 namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers
 {
@@ -179,32 +181,48 @@ namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers
         }
 
         [AuthorizeAdmin]
-        [Area(AreaNames.ADMIN)]
-        [HttpPost]
-        public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRequestModel model)
+[Area(AreaNames.ADMIN)]
+[HttpPost]
+public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRequestModel model)
+{
+    if (model == null || model.SelectedProductIds == null || !model.SelectedProductIds.Any())
+    {
+        return Json(new { success = false, message = "No products selected." });
+    }
+
+    var existingMappings = _supplierProductMappingService
+        .GetAll()
+        .Where(spm => spm.SupplierId == model.SupplierId)
+        .Select(spm => spm.ProductId)
+        .ToHashSet();
+
+    var newProductIds = model.SelectedProductIds
+        .Where(id => !existingMappings.Contains(id))
+        .ToList();
+
+    if (!newProductIds.Any())
+    {
+        return Json(new { success = false, message = "All selected products are already added." });
+    }
+
+    foreach (var productId in newProductIds)
+    {
+        var mapping = new SupplierProductMapping
         {
-            if (model == null || model.SelectedProductIds == null || !model.SelectedProductIds.Any())
-            {
-                return Json(new { success = false, message = "No products selected." });
-            }
+            SupplierId = model.SupplierId,
+            ProductId = productId,
+            QuantityToOrder = 1,
+            UnitCost = 0m,
+            LineTotal = 0m
+        };
 
-            foreach (var productId in model.SelectedProductIds)
-            {
-                var mapping = new SupplierProductMapping
-                {
-                    SupplierId = model.SupplierId,
-                    ProductId = productId,
-                    QuantityToOrder = 1,
-                    UnitCost = 0m,
-                    LineTotal = 0m
-                };
+        _supplierProductMappingService.Insert(mapping);
+    }
 
-                _supplierProductMappingService.Insert(mapping);
-            }
+    return Json(new { success = true, refreshPage = true });
+}
 
-            // Redirect to AddProductPopup again (you can customize this)
-            return Json(new { success = true, redirectUrl = Url.Action("AddProductPopup", "PurchaseOrder", new { supplierId = model.SupplierId }) });
-        }
+
 
 
 

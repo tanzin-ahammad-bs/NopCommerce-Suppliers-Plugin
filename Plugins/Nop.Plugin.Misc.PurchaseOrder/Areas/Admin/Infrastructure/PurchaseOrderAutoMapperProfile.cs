@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Nop.Core.Infrastructure.Mapper;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Models;
 using Nop.Plugin.Misc.Suppliers.Areas.Admin;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 
 namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Infrastructure
 {

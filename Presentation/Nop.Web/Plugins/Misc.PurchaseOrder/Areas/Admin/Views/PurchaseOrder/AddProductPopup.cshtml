@@ -1,51 +1,58 @@
-@model List<Nop.Plugin.Misc.Suppliers.Areas.Admin.Models.AddProductPopupModel>
+@using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models
+@model List<AddProductPopupModel>
 
 @{
     Layout = "_AdminPopupLayout";
     ViewBag.PageTitle = T("Admin.Catalog.Products.RelatedProducts.AddNew").Text;
 }
 
-<section class="content">
-    <div class="container-fluid">
-        <div class="card card-default">
-            <div class="card-body">
-                <form id="saveSelectedProductsForm" method="post">
-                    <input type="hidden" id="supplierId" value="@ViewBag.SupplierId" />
-
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="selectAll" /></th>
-                                <th>@T("Admin.Catalog.Products.Fields.Name").Text</th>
-                                <th>@T("Admin.Catalog.Products.Fields.Published").Text</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var product in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" name="selectedProducts" value="@product.ProductId" />
-                                    </td>
-                                    <td>@product.ProductName</td>
-                                    <td>@(product.Published ? T("Admin.Common.Yes").Text : T("Admin.Common.No").Text)</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-            <div class="card-footer">
-                <button type="button" class="btn btn-primary" id="saveSelectedProductsBtn">
-                    <i class="far fa-floppy-disk"></i> @T("Admin.Common.Save")
-                </button>
-                <button type="button" class="btn btn-secondary" onclick="window.close();">
-                    @T("Admin.Common.Close")
-                </button>
+<form asp-controller="PurchaseOrder" asp-action="AddProductPopup"
+      asp-route-supplierId="@ViewBag.SupplierId"
+      id="saveSelectedProductsForm">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.Catalog.Products.RelatedProducts.AddNew")
+        </h1>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default card-popup">
+                        <div class="card-body">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAll" /></th>
+                                        <th>@T("Admin.Catalog.Products.Fields.Name").Text</th>
+                                        <th>@T("Admin.Catalog.Products.Fields.Published").Text</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var product in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" name="selectedProducts" value="@product.ProductId" />
+                                            </td>
+                                            <td>@product.ProductName</td>
+                                            <td>@(product.Published ? T("Admin.Common.Yes").Text : T("Admin.Common.No").Text)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-primary" id="saveSelectedProductsBtn">
+                                <i class="far fa-floppy-disk"></i> @T("Admin.Common.Save")
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</form>
 
 <script>
     $(document).ready(function () {
@@ -60,11 +67,11 @@
             });
 
             if (selectedProductIds.length === 0) {
-                alert('Please select at least one product.');
+                window.close();
                 return;
             }
 
-            var supplierId = parseInt($('#supplierId').val());
+            var supplierId = parseInt('@ViewBag.SupplierId');
 
             $.ajax({
                 type: "POST",
@@ -75,8 +82,11 @@
                 }),
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
-                    if (response.success && response.redirectUrl) {
-                        window.location.href = response.redirectUrl;
+                    if (response.success) {
+                        if (window.opener && !window.opener.closed) {
+                            window.opener.location.reload();
+                        }
+                        window.close();
                     } else {
                         alert(response.message || "Unexpected error.");
                     }
@@ -88,3 +98,18 @@
         });
     });
 </script>
+
+<style>
+    .modal-dialog {
+        margin-top: 15vh;
+        margin-left: auto;
+        margin-right: auto;
+        width: 70%;
+        max-width: 900px;
+    }
+
+    .modal-content {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+</style>

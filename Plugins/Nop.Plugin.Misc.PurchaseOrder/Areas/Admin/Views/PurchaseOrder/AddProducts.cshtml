@@ -8,7 +8,6 @@
     var allSuppliers = ViewBag.AllSuppliers as List<Supplier>;
 }
 
-
 <div class="card-body">
     <p>@T("Admin.Catalog.Products.SelectProductsForSupplier").Text</p>
 
@@ -92,72 +91,62 @@
             var productId = $(input).data('product-id');
             var quantity = parseFloat($row.find('.quantity-input').val()) || 0;
             var unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
-
             var lineTotal = (quantity * unitCost).toFixed(2);
             $('#lineTotal-' + productId).text(lineTotal);
         };
 
+        window.editProduct = function (productId) {
+            var $row = $('#productsTableBody').find('tr').filter(function () {
+                return $(this).find('[data-product-id]').data('product-id') === productId;
+            });
 
+            var supplierId = $row.data('supplier-id');
+            var quantity = parseInt($row.find('.quantity-input').val()) || 0;
+            var unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
 
-
-
-
-            window.editProduct = function (productId) {
-        var $row = $('#productsTableBody').find('tr').filter(function () {
-            return $(this).find('[data-product-id]').data('product-id') === productId;
-        });
-
-        var supplierId = $row.data('supplier-id');
-        var quantity = parseInt($row.find('.quantity-input').val()) || 0;
-        var unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
-
-        $.ajax({
-            url: '@Url.Action("UpdateProductMapping", "PurchaseOrder")',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                SupplierId: supplierId,
-                ProductId: productId,
-                QuantityToOrder: quantity,
-                UnitCost: unitCost,
-                LineTotal: quantity * unitCost
-            }),
-            success: function (response) {
-                if (response.success) {
-                    $('#lineTotal-' + productId).text(response.lineTotal);
-                    alert(response.message);
-                } else {
-                    alert(response.message);
+            $.ajax({
+                url: '@Url.Action("UpdateProductMapping", "PurchaseOrder")',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    SupplierId: supplierId,
+                    ProductId: productId,
+                    QuantityToOrder: quantity,
+                    UnitCost: unitCost,
+                    LineTotal: quantity * unitCost
+                }),
+                success: function (response) {
+                    if (response.success) {
+                        $('#lineTotal-' + productId).text(response.lineTotal);
+                        alert(response.message);
+                    } else {
+                        alert(response.message);
+                    }
                 }
-            }
-        });
-    };
+            });
+        };
 
-    window.deleteProduct = function (productId) {
-        var $row = $('#productsTableBody').find('tr').filter(function () {
-            return $(this).find('[data-product-id]').data('product-id') === productId;
-        });
+        window.deleteProduct = function (productId) {
+            var $row = $('#productsTableBody').find('tr').filter(function () {
+                return $(this).find('[data-product-id]').data('product-id') === productId;
+            });
 
-        var supplierId = $row.data('supplier-id');
+            var supplierId = $row.data('supplier-id');
 
-        $.ajax({
-            url: '@Url.Action("DeleteProductMapping", "PurchaseOrder")',
-            method: 'POST',
-            data: { productId: productId, supplierId: supplierId },
-            success: function (response) {
-                if (response.success) {
-                    $row.remove();
-                    alert(response.message);
-                } else {
-                    alert(response.message);
+            $.ajax({
+                url: '@Url.Action("DeleteProductMapping", "PurchaseOrder")',
+                method: 'POST',
+                data: { productId: productId, supplierId: supplierId },
+                success: function (response) {
+                    if (response.success) {
+                        $row.remove();
+                        alert(response.message);
+                    } else {
+                        alert(response.message);
+                    }
                 }
-            }
-        });
-    };
-
-
-
-
+            });
+        };
 
         $('#addProductsButton').click(function () {
             var selectedSupplierId = $('#supplierDropdown').val();
@@ -168,39 +157,29 @@
             var url = '@Url.Action("AddProductPopup", "PurchaseOrder")' + '?supplierId=' + selectedSupplierId;
             window.open(url, '_blank', 'width=1000,height=700,scrollbars=yes,resizable=yes');
         });
-    });
-
-
-
 
         window.savePurchaseOrder = function (supplierName, productId) {
-        var $row = $('#lineTotal-' + productId).closest('tr');
-        var lineTotal = parseFloat($row.find('.quantity-input').val()) * parseFloat($row.find('.unitcost-input').val());
+            var $row = $('#lineTotal-' + productId).closest('tr');
+            var lineTotal = parseFloat($row.find('.quantity-input').val()) * parseFloat($row.find('.unitcost-input').val());
 
-        $.ajax({
-            url: '@Url.Action("SavePurchaseOrder", "PurchaseOrder")',
-            type: 'POST',
-            data: {
-                supplierName: supplierName,
-                lineTotal: lineTotal
-            },
-            success: function (response) {
-                if (response.success) {
-                    alert('Purchase order saved successfully.');
-                } else {
-                    alert('Failed to save purchase order.');
+            $.ajax({
+                url: '@Url.Action("SavePurchaseOrder", "PurchaseOrder")',
+                type: 'POST',
+                data: {
+                    supplierName: supplierName,
+                    lineTotal: lineTotal
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Purchase order saved successfully.');
+                    } else {
+                        alert('Failed to save purchase order.');
+                    }
+                },
+                error: function () {
+                    alert('An error occurred while saving the purchase order.');
                 }
-            },
-            error: function () {
-                alert('An error occurred while saving the purchase order.');
-            }
-        });
-    };
-
-
-
+            });
+        };
+    });
 </script>
-
-
-
-

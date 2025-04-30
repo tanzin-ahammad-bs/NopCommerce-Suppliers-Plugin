@@ -3,9 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Data;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
+using Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Services;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 
-namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Services
+namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
 {
     public class PurchaseOrderService : IPurchaseOrderService
     {

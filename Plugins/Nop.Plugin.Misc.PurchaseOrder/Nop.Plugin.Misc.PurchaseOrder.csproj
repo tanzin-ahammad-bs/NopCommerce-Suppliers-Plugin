@@ -81,6 +81,9 @@
 		<Compile Update="Areas\Admin\Services\IPurchaseOrderService.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
+		<Compile Update="Areas\Admin\Services\ISelectedProductService.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
 		<Compile Update="Areas\Admin\Services\ISupplierProductMappingService.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>

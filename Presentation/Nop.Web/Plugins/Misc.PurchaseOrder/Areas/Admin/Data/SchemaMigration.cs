@@ -1,7 +1,7 @@
 ﻿using FluentMigrator;
 using Nop.Data.Extensions;
 using Nop.Data.Migrations;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 
 namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Data
 {

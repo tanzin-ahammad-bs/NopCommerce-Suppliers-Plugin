@@ -1,7 +1,6 @@
-﻿using System;
-using Nop.Core;
+﻿using Nop.Core;
 
-namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain
+namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain
 {
     public class PurchaseOrderList : BaseEntity
     {

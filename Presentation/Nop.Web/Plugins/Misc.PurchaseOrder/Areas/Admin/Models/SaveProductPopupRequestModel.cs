@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Models
+namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models
 {
     public class SaveProductPopupRequestModel
     {

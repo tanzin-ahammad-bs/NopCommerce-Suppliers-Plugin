@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Nop.Core;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 
-namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Services
+namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Services
 {
     public interface IPurchaseOrderService
     {

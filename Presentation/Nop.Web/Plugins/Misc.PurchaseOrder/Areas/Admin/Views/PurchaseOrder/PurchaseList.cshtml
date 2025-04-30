@@ -1,4 +1,4 @@
-@model Nop.Plugin.Misc.Suppliers.Areas.Admin.Models.PurchaseOrderSearchModel
+@model Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchaseOrderSearchModel
 
 @{
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
@@ -107,27 +107,27 @@
                         },
                        ColumnCollection = new List<ColumnProperty>
                         {
-                        new ColumnProperty(nameof(Nop.Plugin.Misc.Suppliers.Areas.Admin.Models.PurchaseOrderModel.PurchaseOrderId))
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchaseOrderModel.PurchaseOrderId))
                         {
                         Title = T("Admin.PurchaseOrder.Fields.PurchaseOrderId").Text,
                         Width = "100"
                         },
-                        new ColumnProperty(nameof(Nop.Plugin.Misc.Suppliers.Areas.Admin.Models.PurchaseOrderModel.SupplierName))
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchaseOrderModel.SupplierName))
                         {
                         Title = T("Admin.PurchaseOrder.Fields.SupplierName").Text,
                         Width = "200"
                         },
-                        new ColumnProperty(nameof(Nop.Plugin.Misc.Suppliers.Areas.Admin.Models.PurchaseOrderModel.CreationDate))
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchaseOrderModel.CreationDate))
                         {
                         Title = T("Admin.PurchaseOrder.Fields.CreationDate").Text,
                         Width = "150"
                         },
-                        new ColumnProperty(nameof(Nop.Plugin.Misc.Suppliers.Areas.Admin.Models.PurchaseOrderModel.TotalAmount))
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchaseOrderModel.TotalAmount))
                         {
                         Title = T("Admin.PurchaseOrder.Fields.TotalAmount").Text,
                         Width = "100"
                         },
-                        new ColumnProperty(nameof(Nop.Plugin.Misc.Suppliers.Areas.Admin.Models.PurchaseOrderModel.CreatedBy))
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchaseOrderModel.CreatedBy))
                         {
                         Title = T("Admin.PurchaseOrder.Fields.CreatedBy").Text,
                         Width = "150"

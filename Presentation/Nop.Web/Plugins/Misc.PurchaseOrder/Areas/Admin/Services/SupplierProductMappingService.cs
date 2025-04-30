@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Nop.Data;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services;
 
-namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Services
+namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
 {
     public class SupplierProductMappingService : ISupplierProductMappingService
     {
@@ -21,6 +18,10 @@ namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Services
         {
             _repository.Insert(entity);
         }
-    }
 
+        public IQueryable<SupplierProductMapping> GetAll()
+        {
+            return _repository.Table;
+        }
+    }
 }

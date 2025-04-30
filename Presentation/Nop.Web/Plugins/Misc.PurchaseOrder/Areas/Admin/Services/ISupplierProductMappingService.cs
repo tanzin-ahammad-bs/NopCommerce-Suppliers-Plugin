@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
+﻿using System.Linq;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 
-namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Services
+namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
 {
     public interface ISupplierProductMappingService
     {
         void Insert(SupplierProductMapping entity);
+
+        IQueryable<SupplierProductMapping> GetAll(); // Required for filtering duplicates
     }
 }
