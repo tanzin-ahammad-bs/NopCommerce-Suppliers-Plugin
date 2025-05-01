@@ -108,6 +108,9 @@
 		<None Update="Areas\Admin\Views\PurchaseOrder\AddProducts.cshtml">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="Areas\Admin\Views\PurchaseOrder\SupplierList.cshtml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Areas\Admin\Views\PurchaseOrder\PurchaseList.cshtml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

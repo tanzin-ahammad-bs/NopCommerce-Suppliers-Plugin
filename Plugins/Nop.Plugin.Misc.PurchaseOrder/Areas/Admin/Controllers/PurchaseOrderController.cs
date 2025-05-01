@@ -12,6 +12,8 @@ using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services;
 using Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Services;
+using Nop.Plugin.Misc.Suppliers.Areas.Admin.Models;
+using Nop.Plugin.Misc.Suppliers.Areas.Admin.Factories;
 
 namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers
 {
@@ -29,11 +31,12 @@ namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers
         private readonly IRepository<SupplierProductMapping> _supplierProductMappingRepository;
         private readonly ISupplierService _supplierService;
         private readonly IPurchaseOrderService _purchaseOrderService;
-        
+        private readonly ISuppliersModelFactory _suppliersModelFactory;
+
 
         public PurchaseOrderController(IPurchaseOrderModelFactory purchaseOrderModelFactory, IRepository<Product> productRepository,
                                           IRepository<ProductSupplierMapping> productSupplierMappingRepository,
-                                          IRepository<Supplier> supplierRepository, ISupplierProductMappingService supplierProductMappingService, IProductService productService, IRepository<SupplierProductMapping> supplierProductMappingRepository, ISupplierService supplierService, IPurchaseOrderService purchaseOrderService)
+                                          IRepository<Supplier> supplierRepository, ISupplierProductMappingService supplierProductMappingService, IProductService productService, IRepository<SupplierProductMapping> supplierProductMappingRepository, ISupplierService supplierService, IPurchaseOrderService purchaseOrderService, ISuppliersModelFactory suppliersModelFactory)
         {
             _purchaseOrderModelFactory = purchaseOrderModelFactory;
             _productRepository = productRepository;
@@ -44,6 +47,7 @@ namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers
             _supplierProductMappingRepository = supplierProductMappingRepository;
             _supplierService = supplierService;
             _purchaseOrderService = purchaseOrderService;
+            _suppliersModelFactory = suppliersModelFactory;
         }
 
 
@@ -70,6 +74,22 @@ namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers
         }
 
 
+        //Supplier List Page
+        public virtual async Task<IActionResult> SupplierList()
+        {
+            var model = await _suppliersModelFactory.PrepareSupplierSearchModelAsync(new SuppliersSearchModel());
+            return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/SupplierList.cshtml", model);
+        }
+
+
+        [HttpPost]
+        public virtual async Task<IActionResult> SupplierList(SuppliersSearchModel searchModel)
+        {
+            var model = await _suppliersModelFactory.PrepareSuppliersListModelAsync(searchModel);
+            return Json(model);
+        }
+
+
 
 
 
@@ -78,21 +98,22 @@ namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers
 
         [AuthorizeAdmin]
         [Area(AreaNames.ADMIN)]
-        public virtual IActionResult AddProducts()
+        public virtual IActionResult AddProducts(int id)
         {
-            // Fetch all suppliers using the SupplierRepository (no need for ISupplierService if it's causing issues)
+            // Fetch all suppliers
             var allSuppliers = _supplierRepository.Table
-                .OrderBy(s => s.Name) // Order them by name or any other criteria
+                .OrderBy(s => s.Name)
                 .ToList();
 
-            // Fetch products as per your logic
-            var model = GetProductsBySupplier(null);  // Adjust according to your data fetching logic
+            // Fetch products for the given supplier ID
+            var model = GetProductsBySupplier(id); // Pass the supplier ID
 
-            // Pass the suppliers list to the view via ViewBag
-            ViewBag.AllSuppliers = allSuppliers;
+            // Pass suppliers to the view
+            ViewBag.SupplierId = id;
 
             return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/AddProducts.cshtml", model);
         }
+
 
 
         [AuthorizeAdmin]
@@ -290,12 +311,16 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
 
 
 
+
+
         [AuthorizeAdmin]
         [Area(AreaNames.ADMIN)]
         [HttpPost]
-        public IActionResult SavePurchaseOrder(string supplierName, decimal lineTotal)
+        public IActionResult SavePurchaseOrder(string supplierName, decimal totalAmount)
         {
-            _purchaseOrderService.CreatePurchaseOrder(supplierName, lineTotal);
+
+            _purchaseOrderService.CreatePurchaseOrder(supplierName, totalAmount);
+
             return Json(new { success = true });
         }
 

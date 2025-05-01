@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Nop.Core;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Vendors;
@@ -103,7 +102,7 @@ public class SuppliersController : BasePluginController
         //prepare model
         var model = await _suppliersModelFactory.PrepareSupplierSearchModelAsync(new SuppliersSearchModel());
 
-        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/List", model);
+        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/List.cshtml", model);
     }
     
     [HttpPost]
@@ -128,7 +127,7 @@ public class SuppliersController : BasePluginController
                     await Task.CompletedTask;
                 });
 
-        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/Create", model);
+        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/Create.cshtml", model);
     }
 
     [HttpPost]
@@ -244,7 +243,7 @@ public class SuppliersController : BasePluginController
             });
 
 
-        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/Edit", model);
+        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/Edit.cshtml", model);
     }
     
     [HttpPost]

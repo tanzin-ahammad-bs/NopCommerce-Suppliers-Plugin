@@ -5,23 +5,14 @@
     ViewBag.PageTitle = T("Admin.Catalog.Products.AddProducts").Text;
     NopHtml.SetActiveMenuItemSystemName("Suppliers");
 
-    var allSuppliers = ViewBag.AllSuppliers as List<Supplier>;
+    var supplierId = Model.FirstOrDefault()?.SupplierId ?? 0;
+    var supplierName = Model.FirstOrDefault()?.SupplierName ?? "";
 }
-
-
 
 <div class="card-body">
     <p>@T("Admin.Catalog.Products.SelectProductsForSupplier").Text</p>
 
-    <div class="form-inline mb-3">
-        <select id="supplierDropdown" class="form-control" style="width: 300px; margin-right: 10px;">
-            <option value="">@T("Admin.Catalog.Products.SelectSupplier").Text</option>
-            @foreach (var supplier in allSuppliers)
-            {
-                <option value="@supplier.Id">@supplier.Name</option>
-            }
-        </select>
-
+    <div class="mb-3">
         <button type="button" id="addProductsButton" class="btn btn-primary">
             <i class="fas fa-plus"></i> @T("Admin.Common.Add").Text
         </button>
@@ -43,7 +34,7 @@
             <tbody id="productsTableBody">
                 @foreach (var product in Model)
                 {
-                    <tr data-supplier-id="@product.SupplierId">
+                    <tr data-product-id="@product.ProductId">
                         <td>@product.ProductName</td>
                         <td>@product.SKU</td>
                         <td>@product.CurrentStock</td>
@@ -59,9 +50,6 @@
                             <span id="lineTotal-@product.ProductId">@product.LineTotal.ToString("F2")</span>
                         </td>
                         <td>
-                            <button class="btn btn-success" onclick="savePurchaseOrder('@product.SupplierName', @product.ProductId)">
-                                @T("Admin.Common.Save").Text
-                            </button>
                             <button class="btn btn-primary" onclick="editProduct(@product.ProductId)">
                                 @T("Admin.Common.Edit").Text
                             </button>
@@ -74,114 +62,101 @@
             </tbody>
         </table>
     </div>
+
+    <div class="mt-4">
+        <button class="btn btn-success" id="saveCentralPurchaseOrder">
+            <i class="fas fa-save"></i> @T("Admin.Common.Save").Text
+        </button>
+    </div>
 </div>
 
 <script>
-    $(document).ready(function () {
-        $('#supplierDropdown').change(function () {
-            var selectedSupplierId = $(this).val();
-            if (selectedSupplierId === "") {
-                $('#productsTableBody tr').show();
-            } else {
-                $('#productsTableBody tr').hide();
-                $('#productsTableBody tr[data-supplier-id="' + selectedSupplierId + '"]').show();
+    const supplierId = @supplierId;
+    const supplierName = '@supplierName';
+
+    function updateLineTotal(input) {
+        const $row = $(input).closest('tr');
+        const productId = $(input).data('product-id');
+        const quantity = parseFloat($row.find('.quantity-input').val()) || 0;
+        const unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
+        const lineTotal = (quantity * unitCost).toFixed(2);
+        $('#lineTotal-' + productId).text(lineTotal);
+    }
+
+    function editProduct(productId) {
+        const $row = $(`tr[data-product-id='${productId}']`);
+        const quantity = parseInt($row.find('.quantity-input').val()) || 0;
+        const unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
+
+        $.ajax({
+            url: '@Url.Action("UpdateProductMapping", "PurchaseOrder")',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                SupplierId: supplierId,
+                ProductId: productId,
+                QuantityToOrder: quantity,
+                UnitCost: unitCost,
+                LineTotal: quantity * unitCost
+            }),
+            success: function (response) {
+                if (response.success) {
+                    $('#lineTotal-' + productId).text(response.lineTotal);
+                    alert(response.message);
+                } else {
+                    alert(response.message);
+                }
             }
         });
+    }
 
-        window.updateLineTotal = function (input) {
-            var $row = $(input).closest('tr');
-            var productId = $(input).data('product-id');
-            var quantity = parseFloat($row.find('.quantity-input').val()) || 0;
-            var unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
-            var lineTotal = (quantity * unitCost).toFixed(2);
-            $('#lineTotal-' + productId).text(lineTotal);
-        };
-
-        window.editProduct = function (productId) {
-            var $row = $('#productsTableBody').find('tr').filter(function () {
-                return $(this).find('[data-product-id]').data('product-id') === productId;
-            });
-
-            var supplierId = $row.data('supplier-id');
-            var quantity = parseInt($row.find('.quantity-input').val()) || 0;
-            var unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
-
-            $.ajax({
-                url: '@Url.Action("UpdateProductMapping", "PurchaseOrder")',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    SupplierId: supplierId,
-                    ProductId: productId,
-                    QuantityToOrder: quantity,
-                    UnitCost: unitCost,
-                    LineTotal: quantity * unitCost
-                }),
-                success: function (response) {
-                    if (response.success) {
-                        $('#lineTotal-' + productId).text(response.lineTotal);
-                        alert(response.message);
-                    } else {
-                        alert(response.message);
-                    }
+    function deleteProduct(productId) {
+        const $row = $(`tr[data-product-id='${productId}']`);
+        $.ajax({
+            url: '@Url.Action("DeleteProductMapping", "PurchaseOrder")',
+            method: 'POST',
+            data: { productId: productId, supplierId: supplierId },
+            success: function (response) {
+                if (response.success) {
+                    $row.remove();
+                    alert(response.message);
+                } else {
+                    alert(response.message);
                 }
-            });
-        };
-
-        window.deleteProduct = function (productId) {
-            var $row = $('#productsTableBody').find('tr').filter(function () {
-                return $(this).find('[data-product-id]').data('product-id') === productId;
-            });
-
-            var supplierId = $row.data('supplier-id');
-
-            $.ajax({
-                url: '@Url.Action("DeleteProductMapping", "PurchaseOrder")',
-                method: 'POST',
-                data: { productId: productId, supplierId: supplierId },
-                success: function (response) {
-                    if (response.success) {
-                        $row.remove();
-                        alert(response.message);
-                    } else {
-                        alert(response.message);
-                    }
-                }
-            });
-        };
-
-        $('#addProductsButton').click(function () {
-            var selectedSupplierId = $('#supplierDropdown').val();
-            if (!selectedSupplierId) {
-                alert('Please select a supplier first.');
-                return;
             }
-            var url = '@Url.Action("AddProductPopup", "PurchaseOrder")' + '?supplierId=' + selectedSupplierId;
-            window.open(url, '_blank', 'width=1000,height=700,scrollbars=yes,resizable=yes');
+        });
+    }
+
+    $('#addProductsButton').click(function () {
+        const url = '@Url.Action("AddProductPopup", "PurchaseOrder")' + '?supplierId=' + supplierId;
+        window.open(url, '_blank', 'width=1000,height=700,scrollbars=yes,resizable=yes');
+    });
+
+    $('#saveCentralPurchaseOrder').click(function () {
+        let totalAmount = 0;
+        $('#productsTableBody tr').each(function () {
+            const quantity = parseFloat($(this).find('.quantity-input').val()) || 0;
+            const unitCost = parseFloat($(this).find('.unitcost-input').val()) || 0;
+            totalAmount += quantity * unitCost;
         });
 
-        window.savePurchaseOrder = function (supplierName, productId) {
-            var $row = $('#lineTotal-' + productId).closest('tr');
-            var lineTotal = parseFloat($row.find('.quantity-input').val()) * parseFloat($row.find('.unitcost-input').val());
-
-            $.ajax({
-                url: '@Url.Action("SavePurchaseOrder", "PurchaseOrder")',
-                type: 'POST',
-                data: {
-                    supplierName: supplierName,
-                    lineTotal: lineTotal
-                },
-                success: function (response) {
-                    if (response.success) {
-                        alert('Purchase order saved successfully.');
-                    } else {
-                        alert('Failed to save purchase order.');
-                    }
-                },
-                error: function () {
-                    alert('An error occurred while saving the purchase order.');
+        $.ajax({
+            url: '@Url.Action("SavePurchaseOrder", "PurchaseOrder")',
+            type: 'POST',
+            data: {
+                supplierName: supplierName,
+                totalAmount: totalAmount
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert('Purchase order saved successfully.');
+                } else {
+                    alert('Failed to save purchase order.');
                 }
-            });
-        };
+            },
+            error: function () {
+                alert('An error occurred while saving the purchase order.');
+            }
+        });
     });
 </script>

@@ -9,5 +9,6 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Services
     {
         Task<IPagedList<PurchaseOrderList>> GetAllPurchaseOrdersAsync(string supplierName = "", DateTime? startDate = null, DateTime? endDate = null, int pageIndex = 0, int pageSize = int.MaxValue);
         void CreatePurchaseOrder(string supplierName, decimal totalAmount);
+
     }
 }
