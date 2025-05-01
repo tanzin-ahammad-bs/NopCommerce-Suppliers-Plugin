@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nop.Core.Infrastructure;
@@ -19,5 +20,13 @@ public class NopStartup : INopStartup
     {
         services.AddScoped<ISuppliersModelFactory, SuppliersModelFactory>();
         services.AddScoped<ISupplierService,  SupplierService>();
+
+
+        // Register the custom ViewLocationExpander
+        services.Configure<RazorViewEngineOptions>(options =>
+        {
+            options.ViewLocationExpanders.Add(new ViewLocationExpander());
+        });
+
     }
 }

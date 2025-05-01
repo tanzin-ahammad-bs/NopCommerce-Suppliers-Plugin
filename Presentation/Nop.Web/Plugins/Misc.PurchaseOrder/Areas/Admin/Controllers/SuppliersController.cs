@@ -103,7 +103,7 @@ public class SuppliersController : BasePluginController
         //prepare model
         var model = await _suppliersModelFactory.PrepareSupplierSearchModelAsync(new SuppliersSearchModel());
 
-        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/List.cshtml", model);
+        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/List", model);
     }
     
     [HttpPost]
@@ -128,7 +128,7 @@ public class SuppliersController : BasePluginController
                     await Task.CompletedTask;
                 });
 
-        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/Create.cshtml", model);
+        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/Create", model);
     }
 
     [HttpPost]
@@ -244,7 +244,7 @@ public class SuppliersController : BasePluginController
             });
 
 
-        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/Edit.cshtml", model);
+        return View("~/Plugins/Misc.Suppliers/Areas/Admin/Views/Suppliers/Edit", model);
     }
     
     [HttpPost]
