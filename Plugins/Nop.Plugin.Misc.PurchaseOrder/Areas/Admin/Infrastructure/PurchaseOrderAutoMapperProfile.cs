@@ -4,7 +4,7 @@ using Nop.Plugin.Misc.Suppliers.Areas.Admin;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 
-namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Infrastructure
+namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Infrastructure
 {
     public class PurchaseOrderAutoMapperProfile : Profile, IOrderedMapperProfile
     {

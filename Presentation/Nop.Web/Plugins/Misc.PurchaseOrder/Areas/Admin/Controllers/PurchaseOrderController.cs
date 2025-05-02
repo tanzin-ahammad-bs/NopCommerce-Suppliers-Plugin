@@ -17,7 +17,7 @@ using Nop.Plugin.Misc.Suppliers.Areas.Admin.Factories;
 using Nop.Core.Events;
 using Nop.Plugin.Misc.PurchaseOrder.Events;
 
-namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers
+namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 {
     [AuthorizeAdmin]
     [Area(AreaNames.ADMIN)]

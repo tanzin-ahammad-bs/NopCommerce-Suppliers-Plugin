@@ -9,7 +9,7 @@ using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Factories;
 using Nop.Plugin.Misc.PurchaseOrder.Events;
 
-namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Infrastructure;
+namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Infrastructure;
 
 public class NopStartup : INopStartup
 {
