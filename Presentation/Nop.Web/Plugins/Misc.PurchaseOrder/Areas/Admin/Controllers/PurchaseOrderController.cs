@@ -14,6 +14,8 @@ using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services;
 using Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Services;
 using Nop.Plugin.Misc.Suppliers.Areas.Admin.Models;
 using Nop.Plugin.Misc.Suppliers.Areas.Admin.Factories;
+using Nop.Core.Events;
+using Nop.Plugin.Misc.PurchaseOrder.Events;
 
 namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers
 {
@@ -32,11 +34,16 @@ namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers
         private readonly ISupplierService _supplierService;
         private readonly IPurchaseOrderService _purchaseOrderService;
         private readonly ISuppliersModelFactory _suppliersModelFactory;
+        private readonly IRepository<PurchaseOrderList> _purchaseOrderRepository;
+        private readonly IEventPublisher _eventPublisher;
 
 
         public PurchaseOrderController(IPurchaseOrderModelFactory purchaseOrderModelFactory, IRepository<Product> productRepository,
                                           IRepository<ProductSupplierMapping> productSupplierMappingRepository,
-                                          IRepository<Supplier> supplierRepository, ISupplierProductMappingService supplierProductMappingService, IProductService productService, IRepository<SupplierProductMapping> supplierProductMappingRepository, ISupplierService supplierService, IPurchaseOrderService purchaseOrderService, ISuppliersModelFactory suppliersModelFactory)
+                                          IRepository<Supplier> supplierRepository, 
+                                          ISupplierProductMappingService supplierProductMappingService, IProductService productService, 
+                                          IRepository<SupplierProductMapping> supplierProductMappingRepository, ISupplierService supplierService, 
+                                          IPurchaseOrderService purchaseOrderService, ISuppliersModelFactory suppliersModelFactory, IRepository<PurchaseOrderList> purchaseOrderRepository, IEventPublisher eventPublisher)
         {
             _purchaseOrderModelFactory = purchaseOrderModelFactory;
             _productRepository = productRepository;
@@ -48,6 +55,8 @@ namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Controllers
             _supplierService = supplierService;
             _purchaseOrderService = purchaseOrderService;
             _suppliersModelFactory = suppliersModelFactory;
+            _purchaseOrderRepository = purchaseOrderRepository;
+            _eventPublisher = eventPublisher;
         }
 
 
@@ -315,14 +324,56 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
 
         [AuthorizeAdmin]
         [Area(AreaNames.ADMIN)]
-        [HttpPost]
-        public IActionResult SavePurchaseOrder(string supplierName, decimal totalAmount)
-        {
+        //[HttpPost]
+        //public IActionResult SavePurchaseOrder(string supplierName, decimal totalAmount)
+        //{
 
-            _purchaseOrderService.CreatePurchaseOrder(supplierName, totalAmount);
+        //    _purchaseOrderService.CreatePurchaseOrder(supplierName, totalAmount);
+
+        //    return Json(new { success = true });
+        //}
+
+
+        [HttpPost]
+        public async Task<IActionResult> SavePurchaseOrder([FromBody] SavePurchaseOrderRequest model)
+        {
+            if (model == null || model.Products == null || !model.Products.Any())
+                return Json(new { success = false, message = "Invalid purchase order data." });
+
+            // Save the basic purchase order info
+
+
+            var latestId = _purchaseOrderRepository.Table.OrderByDescending(p => p.PurchaseOrderId).Select(p => p.PurchaseOrderId).FirstOrDefault();
+            var purchaseOrder = new PurchaseOrderList
+            {
+                PurchaseOrderId = latestId + 1,
+                SupplierName = model.SupplierName,
+                CreationDate = DateTime.UtcNow,
+                TotalAmount = model.TotalAmount,
+                CreatedBy = "Admin"
+            };
+
+
+
+            await _purchaseOrderRepository.InsertAsync(purchaseOrder);
+
+            // Convert to SelectedProductModel for the event
+            var selectedProducts = model.Products.Select(p => new SelectedProductModel
+            {
+                ProductId = p.ProductId,
+                QuantityToOrder = p.QuantityToOrder
+            }).ToList();
+
+            // Fire the event to update stock
+            if (selectedProducts.Any())
+            {
+                await _eventPublisher.PublishAsync(new PurchaseOrderSavedEvent(selectedProducts));
+            }
 
             return Json(new { success = true });
         }
+
+
 
 
 

@@ -35,22 +35,22 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
 
 
 
-        public void CreatePurchaseOrder(string supplierName, decimal totalAmount)
-        {
-            var latestId = _purchaseOrderRepository.Table.OrderByDescending(p => p.PurchaseOrderId).Select(p => p.PurchaseOrderId).FirstOrDefault();
-            var purchaseOrder = new PurchaseOrderList
-            {
-                PurchaseOrderId = latestId + 1,
-                SupplierName = supplierName,
-                CreationDate = DateTime.UtcNow,
-                TotalAmount = totalAmount,
-                CreatedBy = "Admin"
-            };
+        //public void CreatePurchaseOrder(string supplierName, decimal totalAmount)
+        //{
+        //    var latestId = _purchaseOrderRepository.Table.OrderByDescending(p => p.PurchaseOrderId).Select(p => p.PurchaseOrderId).FirstOrDefault();
+        //    var purchaseOrder = new PurchaseOrderList
+        //    {
+        //        PurchaseOrderId = latestId + 1,
+        //        SupplierName = supplierName,
+        //        CreationDate = DateTime.UtcNow,
+        //        TotalAmount = totalAmount,
+        //        CreatedBy = "Admin"
+        //    };
 
-            _purchaseOrderRepository.Insert(purchaseOrder);
+        //    _purchaseOrderRepository.Insert(purchaseOrder);
 
 
-        }
+        //}
 
 
 

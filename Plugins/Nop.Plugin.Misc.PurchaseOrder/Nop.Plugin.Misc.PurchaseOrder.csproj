@@ -48,6 +48,12 @@
 		<Compile Update="Areas\Admin\Domain\SupplierProductMapping.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
+		<Compile Update="Areas\Admin\Events\EventConsumers\PurchaseOrderSavedConsumer.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Events\PurchaseOrderSavedEvent.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
 		<Compile Update="Areas\Admin\Factories\IPurchaseOrderModelFactory.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
@@ -73,6 +79,9 @@
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
 		<Compile Update="Areas\Admin\Models\SaveProductPopupRequestModel.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Models\SavePurchaseOrderRequest.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
 		<Compile Update="Areas\Admin\Models\SelectedProductModel.cs">
