@@ -2,7 +2,7 @@
     "Group": "Misc",
     "FriendlyName": "Purchase Order",
     "SystemName": "Misc.PurchaseOrder",
-    "Version": "5.00",
+    "Version": "6.00",
     "SupportedVersions": [ "4.80" ],
     "Author": "YourName",
     "DisplayOrder": 2,

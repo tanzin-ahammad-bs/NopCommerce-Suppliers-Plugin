@@ -12,18 +12,25 @@
 
 <div class="card-body">
     <div class="mb-3">
-        <a href="javascript:history.back()" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> @T("Admin.Common.Back").Text
+        <a class="btn btn-secondary" href="@Url.Action("PurchaseList", "PurchaseOrder")">
+            <i class="fas fa-arrow-left"></i> Back to List
         </a>
     </div>
 
-    <div class="form-group mb-4" style="width: 400px;">
+    <p>@T("Admin.Catalog.Products.SelectProductsForSupplier").Text</p>
+
+    <div class="form-group mb-3">
         <label>@T("Admin.Common.Supplier")</label>
-        @Html.DropDownList("SupplierId", allSuppliers, "-- Select Supplier --", new { @class = "form-control select2", id = "supplierDropdown" })
+        @Html.DropDownList("SupplierId", allSuppliers, "-- Select Supplier --", new
+            {
+                @class = "form-control select2",
+                id = "supplierDropdown",
+                style = "width: 100%; font-size: 16px; padding: 10px;"
+            })
     </div>
 
     <div class="mb-3">
-        <button type="button" id="addProductsButton" class="btn btn-primary" @(supplierId == 0 ? "disabled" : "")>
+        <button type="button" id="addProductsButton" class="btn btn-primary">
             <i class="fas fa-plus"></i> @T("Admin.Common.Add").Text
         </button>
     </div>
@@ -42,57 +49,61 @@
                 </tr>
             </thead>
             <tbody id="productsTableBody">
-                @if (supplierId != 0)
+                @foreach (var product in Model)
                 {
-                    foreach (var product in Model)
-                    {
-                        <tr data-product-id="@product.ProductId">
-                            <td>@product.ProductName</td>
-                            <td>@product.SKU</td>
-                            <td>@product.CurrentStock</td>
-                            <td>
-                                <input type="number" class="form-control quantity-input" value="@product.QuantityToOrder"
-                                       onchange="updateLineTotal(this)" data-product-id="@product.ProductId" />
-                            </td>
-                            <td>
-                                <input type="number" class="form-control unitcost-input" value="@product.UnitCost"
-                                       onchange="updateLineTotal(this)" data-product-id="@product.ProductId" />
-                            </td>
-                            <td>
-                                <span id="lineTotal-@product.ProductId">@product.LineTotal.ToString("F2")</span>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary" onclick="editProduct(@product.ProductId)">
-                                    @T("Admin.Common.Edit").Text
-                                </button>
-                                <button class="btn btn-danger" onclick="deleteProduct(@product.ProductId)">
-                                    @T("Admin.Common.Delete").Text
-                                </button>
-                            </td>
-                        </tr>
-                    }
+                    <tr data-product-id="@product.ProductId">
+                        <td>@product.ProductName</td>
+                        <td>@product.SKU</td>
+                        <td>@product.CurrentStock</td>
+                        <td>
+                            <input type="number" class="form-control quantity-input" value="@product.QuantityToOrder"
+                                   onchange="updateLineTotal(this)" data-product-id="@product.ProductId" />
+                        </td>
+                        <td>
+                            <input type="number" class="form-control unitcost-input" value="@product.UnitCost"
+                                   onchange="updateLineTotal(this)" data-product-id="@product.ProductId" />
+                        </td>
+                        <td>
+                            <span id="lineTotal-@product.ProductId">@product.LineTotal.ToString("F2")</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary" onclick="editProduct(@product.ProductId)">
+                                @T("Admin.Common.Edit").Text
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteProduct(@product.ProductId)">
+                                @T("Admin.Common.Delete").Text
+                            </button>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
     </div>
 
     <div class="mt-4">
-        <button class="btn btn-success" id="saveCentralPurchaseOrder" @(supplierId == 0 ? "disabled" : "")>
+        <button class="btn btn-success" id="saveCentralPurchaseOrder">
             <i class="fas fa-save"></i> @T("Admin.Common.Save").Text
         </button>
     </div>
 </div>
 
 
-    <script>
-        const supplierId = @supplierId;
-        const supplierName = '@supplierName';
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
-        $('#supplierDropdown').change(function () {
-            const selectedId = $(this).val();
-            if (selectedId) {
-                window.location.href = '@Url.Action("AddProducts", "PurchaseOrder")' + '?id=' + selectedId;
-            }
+    <script>
+        $(document).ready(function () {
+            $('#supplierDropdown').select2({
+                placeholder: "-- Select Supplier --",
+                allowClear: true
+            });
+
+            $('#supplierDropdown').change(function () {
+                const selectedId = $(this).val();
+                if (selectedId) {
+                    window.location.href = '@Url.Action("AddProducts", "PurchaseOrder")' + '?id=' + selectedId;
+                }
+            });
         });
 
         function updateLineTotal(input) {
@@ -106,7 +117,7 @@
 
         function editProduct(productId) {
             const $row = $(`tr[data-product-id='${productId}']`);
-            const quantity = parseInt($row.find('.quantity-input').val()) || 0;
+            const quantity = parseFloat($row.find('.quantity-input').val()) || 0;
             const unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
 
             $.ajax({
@@ -114,7 +125,7 @@
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    SupplierId: supplierId,
+                    SupplierId: @supplierId,
                     ProductId: productId,
                     QuantityToOrder: quantity,
                     UnitCost: unitCost,
@@ -122,8 +133,9 @@
                 }),
                 success: function (response) {
                     if (response.success) {
-                        $('#lineTotal-' + productId).text(response.lineTotal);
                         alert(response.message);
+                        $('#lineTotal-' + productId).text(response.lineTotal.toFixed(2));
+                        
                     } else {
                         alert(response.message);
                     }
@@ -131,12 +143,17 @@
             });
         }
 
+
+
         function deleteProduct(productId) {
             const $row = $(`tr[data-product-id='${productId}']`);
             $.ajax({
                 url: '@Url.Action("DeleteProductMapping", "PurchaseOrder")',
                 method: 'POST',
-                data: { productId: productId, supplierId: supplierId },
+                data: {
+                    productId: productId,
+                    supplierId: @supplierId
+                },
                 success: function (response) {
                     if (response.success) {
                         $row.remove();
@@ -149,7 +166,7 @@
         }
 
         $('#addProductsButton').click(function () {
-            const url = '@Url.Action("AddProductPopup", "PurchaseOrder")' + '?supplierId=' + supplierId;
+            const url = '@Url.Action("AddProductPopup", "PurchaseOrder")' + '?supplierId=' + @supplierId;
             window.open(url, '_blank', 'width=1000,height=700,scrollbars=yes,resizable=yes');
         });
 
@@ -175,7 +192,7 @@
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    SupplierName: supplierName,
+                    SupplierName: '@supplierName',
                     TotalAmount: totalAmount,
                     Products: products
                 }),
@@ -192,3 +209,4 @@
             });
         });
     </script>
+

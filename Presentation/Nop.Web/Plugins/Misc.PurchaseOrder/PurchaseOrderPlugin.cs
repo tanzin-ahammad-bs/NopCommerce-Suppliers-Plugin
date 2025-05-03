@@ -83,7 +83,9 @@ public class PurchaseOrderPlugin : BasePlugin
             ["Admin.Common.No"] = "No",
             ["Admin.Common.Save"] = "Save",
             ["Admin.Common.Close"] = "Close",
-            ["Admin.Common.Add"] = "Select Product"
+            ["Admin.Common.Add"] = "Select Product",
+            ["Admin.Common.Back"] = "Back",
+            ["Admin.Common.Supplier"] = "Select a Supplier"
 
 
 
