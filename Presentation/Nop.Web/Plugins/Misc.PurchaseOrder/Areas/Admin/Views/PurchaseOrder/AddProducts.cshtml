@@ -5,15 +5,25 @@
     ViewBag.PageTitle = T("Admin.Catalog.Products.AddProducts").Text;
     NopHtml.SetActiveMenuItemSystemName("Suppliers");
 
-    var supplierId = Model.FirstOrDefault()?.SupplierId ?? 0;
-    var supplierName = Model.FirstOrDefault()?.SupplierName ?? "";
+    var supplierId = ViewBag.SupplierId ?? 0;
+    var supplierName = ViewBag.SupplierName ?? "";
+    var allSuppliers = ViewBag.AllSuppliers as List<SelectListItem>;
 }
 
 <div class="card-body">
-    <p>@T("Admin.Catalog.Products.SelectProductsForSupplier").Text</p>
+    <div class="mb-3">
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> @T("Admin.Common.Back").Text
+        </a>
+    </div>
+
+    <div class="form-group mb-4" style="width: 400px;">
+        <label>@T("Admin.Common.Supplier")</label>
+        @Html.DropDownList("SupplierId", allSuppliers, "-- Select Supplier --", new { @class = "form-control select2", id = "supplierDropdown" })
+    </div>
 
     <div class="mb-3">
-        <button type="button" id="addProductsButton" class="btn btn-primary">
+        <button type="button" id="addProductsButton" class="btn btn-primary" @(supplierId == 0 ? "disabled" : "")>
             <i class="fas fa-plus"></i> @T("Admin.Common.Add").Text
         </button>
     </div>
@@ -32,147 +42,153 @@
                 </tr>
             </thead>
             <tbody id="productsTableBody">
-                @foreach (var product in Model)
+                @if (supplierId != 0)
                 {
-                    <tr data-product-id="@product.ProductId">
-                        <td>@product.ProductName</td>
-                        <td>@product.SKU</td>
-                        <td>@product.CurrentStock</td>
-                        <td>
-                            <input type="number" class="form-control quantity-input" value="@product.QuantityToOrder"
-                                   onchange="updateLineTotal(this)" data-product-id="@product.ProductId" />
-                        </td>
-                        <td>
-                            <input type="number" class="form-control unitcost-input" value="@product.UnitCost"
-                                   onchange="updateLineTotal(this)" data-product-id="@product.ProductId" />
-                        </td>
-                        <td>
-                            <span id="lineTotal-@product.ProductId">@product.LineTotal.ToString("F2")</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-primary" onclick="editProduct(@product.ProductId)">
-                                @T("Admin.Common.Edit").Text
-                            </button>
-                            <button class="btn btn-danger" onclick="deleteProduct(@product.ProductId)">
-                                @T("Admin.Common.Delete").Text
-                            </button>
-                        </td>
-                    </tr>
+                    foreach (var product in Model)
+                    {
+                        <tr data-product-id="@product.ProductId">
+                            <td>@product.ProductName</td>
+                            <td>@product.SKU</td>
+                            <td>@product.CurrentStock</td>
+                            <td>
+                                <input type="number" class="form-control quantity-input" value="@product.QuantityToOrder"
+                                       onchange="updateLineTotal(this)" data-product-id="@product.ProductId" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control unitcost-input" value="@product.UnitCost"
+                                       onchange="updateLineTotal(this)" data-product-id="@product.ProductId" />
+                            </td>
+                            <td>
+                                <span id="lineTotal-@product.ProductId">@product.LineTotal.ToString("F2")</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" onclick="editProduct(@product.ProductId)">
+                                    @T("Admin.Common.Edit").Text
+                                </button>
+                                <button class="btn btn-danger" onclick="deleteProduct(@product.ProductId)">
+                                    @T("Admin.Common.Delete").Text
+                                </button>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
     </div>
 
     <div class="mt-4">
-        <button class="btn btn-success" id="saveCentralPurchaseOrder">
+        <button class="btn btn-success" id="saveCentralPurchaseOrder" @(supplierId == 0 ? "disabled" : "")>
             <i class="fas fa-save"></i> @T("Admin.Common.Save").Text
         </button>
     </div>
 </div>
 
-<script>
-    const supplierId = @supplierId;
-    const supplierName = '@supplierName';
 
-    function updateLineTotal(input) {
-        const $row = $(input).closest('tr');
-        const productId = $(input).data('product-id');
-        const quantity = parseFloat($row.find('.quantity-input').val()) || 0;
-        const unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
-        const lineTotal = (quantity * unitCost).toFixed(2);
-        $('#lineTotal-' + productId).text(lineTotal);
-    }
+    <script>
+        const supplierId = @supplierId;
+        const supplierName = '@supplierName';
 
-    function editProduct(productId) {
-        const $row = $(`tr[data-product-id='${productId}']`);
-        const quantity = parseInt($row.find('.quantity-input').val()) || 0;
-        const unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
-
-        $.ajax({
-            url: '@Url.Action("UpdateProductMapping", "PurchaseOrder")',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                SupplierId: supplierId,
-                ProductId: productId,
-                QuantityToOrder: quantity,
-                UnitCost: unitCost,
-                LineTotal: quantity * unitCost
-            }),
-            success: function (response) {
-                if (response.success) {
-                    $('#lineTotal-' + productId).text(response.lineTotal);
-                    alert(response.message);
-                } else {
-                    alert(response.message);
-                }
+        $('#supplierDropdown').change(function () {
+            const selectedId = $(this).val();
+            if (selectedId) {
+                window.location.href = '@Url.Action("AddProducts", "PurchaseOrder")' + '?id=' + selectedId;
             }
         });
-    }
 
-    function deleteProduct(productId) {
-        const $row = $(`tr[data-product-id='${productId}']`);
-        $.ajax({
-            url: '@Url.Action("DeleteProductMapping", "PurchaseOrder")',
-            method: 'POST',
-            data: { productId: productId, supplierId: supplierId },
-            success: function (response) {
-                if (response.success) {
-                    $row.remove();
-                    alert(response.message);
-                } else {
-                    alert(response.message);
+        function updateLineTotal(input) {
+            const $row = $(input).closest('tr');
+            const productId = $(input).data('product-id');
+            const quantity = parseFloat($row.find('.quantity-input').val()) || 0;
+            const unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
+            const lineTotal = (quantity * unitCost).toFixed(2);
+            $('#lineTotal-' + productId).text(lineTotal);
+        }
+
+        function editProduct(productId) {
+            const $row = $(`tr[data-product-id='${productId}']`);
+            const quantity = parseInt($row.find('.quantity-input').val()) || 0;
+            const unitCost = parseFloat($row.find('.unitcost-input').val()) || 0;
+
+            $.ajax({
+                url: '@Url.Action("UpdateProductMapping", "PurchaseOrder")',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    SupplierId: supplierId,
+                    ProductId: productId,
+                    QuantityToOrder: quantity,
+                    UnitCost: unitCost,
+                    LineTotal: quantity * unitCost
+                }),
+                success: function (response) {
+                    if (response.success) {
+                        $('#lineTotal-' + productId).text(response.lineTotal);
+                        alert(response.message);
+                    } else {
+                        alert(response.message);
+                    }
                 }
-            }
+            });
+        }
+
+        function deleteProduct(productId) {
+            const $row = $(`tr[data-product-id='${productId}']`);
+            $.ajax({
+                url: '@Url.Action("DeleteProductMapping", "PurchaseOrder")',
+                method: 'POST',
+                data: { productId: productId, supplierId: supplierId },
+                success: function (response) {
+                    if (response.success) {
+                        $row.remove();
+                        alert(response.message);
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            });
+        }
+
+        $('#addProductsButton').click(function () {
+            const url = '@Url.Action("AddProductPopup", "PurchaseOrder")' + '?supplierId=' + supplierId;
+            window.open(url, '_blank', 'width=1000,height=700,scrollbars=yes,resizable=yes');
         });
-    }
 
-    $('#addProductsButton').click(function () {
-        const url = '@Url.Action("AddProductPopup", "PurchaseOrder")' + '?supplierId=' + supplierId;
-        window.open(url, '_blank', 'width=1000,height=700,scrollbars=yes,resizable=yes');
-    });
+        $('#saveCentralPurchaseOrder').click(function () {
+            let totalAmount = 0;
+            let products = [];
 
+            $('#productsTableBody tr').each(function () {
+                const productId = $(this).data('product-id');
+                const quantity = parseFloat($(this).find('.quantity-input').val()) || 0;
+                const unitCost = parseFloat($(this).find('.unitcost-input').val()) || 0;
+                const lineTotal = quantity * unitCost;
+                totalAmount += lineTotal;
 
+                products.push({
+                    ProductId: productId,
+                    QuantityToOrder: quantity
+                });
+            });
 
-    $('#saveCentralPurchaseOrder').click(function () {
-    let totalAmount = 0;
-    let products = [];
-
-        $('#productsTableBody tr').each(function () {
-            const productId = $(this).data('product-id');
-            const quantity = parseFloat($(this).find('.quantity-input').val()) || 0;
-            const unitCost = parseFloat($(this).find('.unitcost-input').val()) || 0;
-            const lineTotal = quantity * unitCost;
-            totalAmount += lineTotal;
-
-            products.push({
-                ProductId: productId,
-                QuantityToOrder: quantity
+            $.ajax({
+                url: '@Url.Action("SavePurchaseOrder", "PurchaseOrder")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    SupplierName: supplierName,
+                    TotalAmount: totalAmount,
+                    Products: products
+                }),
+                success: function (response) {
+                    if (response.success) {
+                        alert('Purchase order saved and product stocks updated.');
+                    } else {
+                        alert('Failed to save purchase order.');
+                    }
+                },
+                error: function () {
+                    alert('An error occurred while saving the purchase order.');
+                }
             });
         });
-
-        $.ajax({
-            url: '@Url.Action("SavePurchaseOrder", "PurchaseOrder")',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                SupplierName: supplierName,
-                TotalAmount: totalAmount,
-                Products: products
-            }),
-            success: function (response) {
-                if (response.success) {
-                    alert('Purchase order saved and product stocks updated.');
-                } else {
-                    alert('Failed to save purchase order.');
-                }
-            },
-            error: function () {
-                alert('An error occurred while saving the purchase order.');
-            }
-        });
-    });
-
-
-
-</script>
+    </script>

@@ -16,6 +16,7 @@ using Nop.Plugin.Misc.Suppliers.Areas.Admin.Models;
 using Nop.Plugin.Misc.Suppliers.Areas.Admin.Factories;
 using Nop.Core.Events;
 using Nop.Plugin.Misc.PurchaseOrder.Events;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 {
@@ -43,7 +44,8 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
                                           IRepository<Supplier> supplierRepository, 
                                           ISupplierProductMappingService supplierProductMappingService, IProductService productService, 
                                           IRepository<SupplierProductMapping> supplierProductMappingRepository, ISupplierService supplierService, 
-                                          IPurchaseOrderService purchaseOrderService, ISuppliersModelFactory suppliersModelFactory, IRepository<PurchaseOrderList> purchaseOrderRepository, IEventPublisher eventPublisher)
+                                          IPurchaseOrderService purchaseOrderService, ISuppliersModelFactory suppliersModelFactory, 
+                                          IRepository<PurchaseOrderList> purchaseOrderRepository, IEventPublisher eventPublisher)
         {
             _purchaseOrderModelFactory = purchaseOrderModelFactory;
             _productRepository = productRepository;
@@ -109,19 +111,26 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
         [Area(AreaNames.ADMIN)]
         public virtual IActionResult AddProducts(int id)
         {
-            // Fetch all suppliers
+            // Fetch all suppliers for dropdown
             var allSuppliers = _supplierRepository.Table
                 .OrderBy(s => s.Name)
-                .ToList();
+                .Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.Name,
+                    Selected = s.Id == id // mark selected supplier
+                }).ToList();
 
-            // Fetch products for the given supplier ID
-            var model = GetProductsBySupplier(id); // Pass the supplier ID
+            ViewBag.AllSuppliers = allSuppliers;        // send to view
+            ViewBag.SupplierId = id;                    // send to view
+            ViewBag.SupplierName = allSuppliers.FirstOrDefault(x => x.Value == id.ToString())?.Text ?? "";
 
-            // Pass suppliers to the view
-            ViewBag.SupplierId = id;
+            // Load default products for selected supplier
+            var model = GetProductsBySupplier(id);
 
             return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/AddProducts.cshtml", model);
         }
+
 
 
 

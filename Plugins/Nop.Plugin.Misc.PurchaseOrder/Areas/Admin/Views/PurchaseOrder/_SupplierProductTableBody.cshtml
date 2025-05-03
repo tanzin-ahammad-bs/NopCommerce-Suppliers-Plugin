@@ -1,0 +1,29 @@
+@model IEnumerable<SelectedProductModel>
+
+@foreach (var product in Model)
+{
+    <tr data-product-id="@product.ProductId">
+        <td>@product.ProductName</td>
+        <td>@product.SKU</td>
+        <td>@product.CurrentStock</td>
+        <td>
+            <input type="number" class="form-control quantity-input" value="@product.QuantityToOrder"
+                   onchange="updateLineTotal(this)" data-product-id="@product.ProductId" />
+        </td>
+        <td>
+            <input type="number" class="form-control unitcost-input" value="@product.UnitCost"
+                   onchange="updateLineTotal(this)" data-product-id="@product.ProductId" />
+        </td>
+        <td>
+            <span id="lineTotal-@product.ProductId">@product.LineTotal.ToString("F2")</span>
+        </td>
+        <td>
+            <button class="btn btn-primary" onclick="editProduct(@product.ProductId)">
+                @T("Admin.Common.Edit").Text
+            </button>
+            <button class="btn btn-danger" onclick="deleteProduct(@product.ProductId)">
+                @T("Admin.Common.Delete").Text
+            </button>
+        </td>
+    </tr>
+}
