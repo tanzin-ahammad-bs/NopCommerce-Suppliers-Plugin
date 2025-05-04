@@ -45,6 +45,9 @@
 		<Compile Update="Areas\Admin\Domain\PurchaseOrderList.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
+		<Compile Update="Areas\Admin\Domain\PurchaseOrderProductMapping.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
 		<Compile Update="Areas\Admin\Domain\SupplierProductMapping.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
@@ -73,6 +76,9 @@
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
 		<Compile Update="Areas\Admin\Models\PurchaseOrderModel.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Models\PurchaseOrderProductMappingModel.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
 		<Compile Update="Areas\Admin\Models\PurchaseOrderSearchModel.cs">
@@ -117,6 +123,9 @@
 		<None Update="Areas\Admin\Views\PurchaseOrder\AddProducts.cshtml">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="Areas\Admin\Views\PurchaseOrder\PurchaseOrderProductsList.cshtml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Areas\Admin\Views\PurchaseOrder\SupplierList.cshtml">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -134,5 +143,6 @@
 	<Target Name="NopTarget" AfterTargets="Build">
 		<MSBuild Projects="@(ClearPluginAssemblies)" Properties="PluginPath=$(OutDir)" Targets="NopClear" />
 	</Target>
+	
 
 </Project>

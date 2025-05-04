@@ -170,43 +170,47 @@
             window.open(url, '_blank', 'width=1000,height=700,scrollbars=yes,resizable=yes');
         });
 
-        $('#saveCentralPurchaseOrder').click(function () {
-            let totalAmount = 0;
-            let products = [];
 
-            $('#productsTableBody tr').each(function () {
-                const productId = $(this).data('product-id');
-                const quantity = parseFloat($(this).find('.quantity-input').val()) || 0;
-                const unitCost = parseFloat($(this).find('.unitcost-input').val()) || 0;
-                const lineTotal = quantity * unitCost;
-                totalAmount += lineTotal;
+    $('#saveCentralPurchaseOrder').click(function () {
+    let totalAmount = 0;
+    let products = [];
 
-                products.push({
-                    ProductId: productId,
-                    QuantityToOrder: quantity
-                });
-            });
+        $('#productsTableBody tr').each(function () {
+            const productId = $(this).data('product-id');
+            const quantity = parseFloat($(this).find('.quantity-input').val()) || 0;
+            const unitCost = parseFloat($(this).find('.unitcost-input').val()) || 0;
+            const lineTotal = quantity * unitCost;
+            totalAmount += lineTotal;
 
-            $.ajax({
-                url: '@Url.Action("SavePurchaseOrder", "PurchaseOrder")',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    SupplierName: '@supplierName',
-                    TotalAmount: totalAmount,
-                    Products: products
-                }),
-                success: function (response) {
-                    if (response.success) {
-                        alert('Purchase order saved and product stocks updated.');
-                    } else {
-                        alert('Failed to save purchase order.');
-                    }
-                },
-                error: function () {
-                    alert('An error occurred while saving the purchase order.');
-                }
+            products.push({
+                ProductId: productId,
+                QuantityToOrder: quantity,
+                UnitCost: unitCost
             });
         });
+
+        $.ajax({
+            url: '@Url.Action("SavePurchaseOrder", "PurchaseOrder")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                SupplierName: '@supplierName',
+                TotalAmount: totalAmount,
+                Products: products
+            }),
+            success: function (response) {
+                if (response.success) {
+                    alert('Purchase order saved and product stocks updated.');
+                    location.reload();
+                } else {
+                    alert('Failed to save purchase order.');
+                }
+            },
+            error: function () {
+                alert('An error occurred while saving the purchase order.');
+            }
+        });
+    });
+
     </script>
 

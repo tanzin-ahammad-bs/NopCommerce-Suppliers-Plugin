@@ -27,6 +27,9 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Infrastructure
             CreateMap<SupplierProductMapping, SelectedProductModel>();
             CreateMap<SelectedProductModel, SupplierProductMapping>();
 
+            CreateMap<PurchaseOrderProductMapping, PurchaseOrderProductMappingModel>();
+            CreateMap<PurchaseOrderProductMappingModel, PurchaseOrderProductMapping>();
+
 
 
 

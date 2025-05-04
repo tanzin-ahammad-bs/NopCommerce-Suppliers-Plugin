@@ -5,7 +5,7 @@ using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 
 namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Data
 {
-    [NopMigration("2025/04/14 10:36:59", "Misc.PurchaseOrder base schema", MigrationProcessType.Installation)]
+    [NopMigration("2026/05/15 13:39:59", "Misc.PurchaseOrder base schema", MigrationProcessType.Installation)]
     public class SchemaMigratio : AutoReversingMigration
     {
         public override void Up()
@@ -13,6 +13,7 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Data
 
             Create.TableFor<PurchaseOrderList>();
             Create.TableFor<SupplierProductMapping>();
+            Create.TableFor<PurchaseOrderProductMapping>();
         }
     }
 }

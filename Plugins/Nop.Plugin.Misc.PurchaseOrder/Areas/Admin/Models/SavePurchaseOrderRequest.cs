@@ -11,5 +11,6 @@
     {
         public int ProductId { get; set; }
         public int QuantityToOrder { get; set; }
+        public decimal UnitCost { get; set; } // ✅ Added field
     }
 }

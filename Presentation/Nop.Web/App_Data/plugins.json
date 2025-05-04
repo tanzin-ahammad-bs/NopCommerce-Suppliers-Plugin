@@ -76,12 +76,12 @@
       "Version": "4.80.1"
     },
     {
-      "SystemName": "Misc.PurchaseOrder",
-      "Version": "6.00"
-    },
-    {
       "SystemName": "Misc.Suppliers",
       "Version": "1.6"
+    },
+    {
+      "SystemName": "Misc.PurchaseOrder",
+      "Version": "6.00"
     }
   ],
   "PluginNamesToUninstall": [],

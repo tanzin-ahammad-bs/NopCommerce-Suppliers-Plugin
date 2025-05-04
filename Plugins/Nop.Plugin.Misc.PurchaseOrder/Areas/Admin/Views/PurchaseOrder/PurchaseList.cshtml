@@ -147,9 +147,10 @@
 
 <script>
     function renderViewButton(data, type, row, meta) {
-        var url = '@Url.Action("SupplierList", "PurchaseOrder")';
+        var url = '@Url.Action("PurchaseOrderProductsList", "PurchaseOrder")' + '?purchaseOrderId=' + row.PurchaseOrderId;
         return '<a class="btn btn-default" href="' + url + '" title="@T("Admin.Common.View")">' +
                '<i class="fas fa-eye"></i>' +
                '</a>';
     }
+
 </script>

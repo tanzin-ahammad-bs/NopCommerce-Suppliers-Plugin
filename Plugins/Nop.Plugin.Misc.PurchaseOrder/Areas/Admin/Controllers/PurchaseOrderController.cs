@@ -17,6 +17,7 @@ using Nop.Plugin.Misc.Suppliers.Areas.Admin.Factories;
 using Nop.Core.Events;
 using Nop.Plugin.Misc.PurchaseOrder.Events;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using DocumentFormat.OpenXml.EMMA;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 {
@@ -37,6 +38,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
         private readonly ISuppliersModelFactory _suppliersModelFactory;
         private readonly IRepository<PurchaseOrderList> _purchaseOrderRepository;
         private readonly IEventPublisher _eventPublisher;
+        private readonly IRepository<PurchaseOrderProductMapping> _purchaseOrderProductMappingRepository;
 
 
         public PurchaseOrderController(IPurchaseOrderModelFactory purchaseOrderModelFactory, IRepository<Product> productRepository,
@@ -45,7 +47,8 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
                                           ISupplierProductMappingService supplierProductMappingService, IProductService productService, 
                                           IRepository<SupplierProductMapping> supplierProductMappingRepository, ISupplierService supplierService, 
                                           IPurchaseOrderService purchaseOrderService, ISuppliersModelFactory suppliersModelFactory, 
-                                          IRepository<PurchaseOrderList> purchaseOrderRepository, IEventPublisher eventPublisher)
+                                          IRepository<PurchaseOrderList> purchaseOrderRepository, IEventPublisher eventPublisher,
+                                          IRepository<PurchaseOrderProductMapping> purchaseOrderProductMappingRepository)
         {
             _purchaseOrderModelFactory = purchaseOrderModelFactory;
             _productRepository = productRepository;
@@ -59,6 +62,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
             _suppliersModelFactory = suppliersModelFactory;
             _purchaseOrderRepository = purchaseOrderRepository;
             _eventPublisher = eventPublisher;
+            _purchaseOrderProductMappingRepository = purchaseOrderProductMappingRepository;
         }
 
 
@@ -349,10 +353,12 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
             if (model == null || model.Products == null || !model.Products.Any())
                 return Json(new { success = false, message = "Invalid purchase order data." });
 
-            // Save the basic purchase order info
+            // Get latest PurchaseOrderId and create a new one
+            var latestId = _purchaseOrderRepository.Table
+                .OrderByDescending(p => p.PurchaseOrderId)
+                .Select(p => p.PurchaseOrderId)
+                .FirstOrDefault();
 
-
-            var latestId = _purchaseOrderRepository.Table.OrderByDescending(p => p.PurchaseOrderId).Select(p => p.PurchaseOrderId).FirstOrDefault();
             var purchaseOrder = new PurchaseOrderList
             {
                 PurchaseOrderId = latestId + 1,
@@ -362,25 +368,64 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
                 CreatedBy = "Admin"
             };
 
-
-
             await _purchaseOrderRepository.InsertAsync(purchaseOrder);
 
-            // Convert to SelectedProductModel for the event
+            // Insert each product mapping with quantity and cost
+            foreach (var product in model.Products)
+            {
+                var mapping = new PurchaseOrderProductMapping
+                {
+                    PurchaseOrderId = purchaseOrder.PurchaseOrderId,
+                    ProductId = product.ProductId,
+                    QuantityToOrder = product.QuantityToOrder,
+                    UnitCost = product.UnitCost
+                };
+
+                await _purchaseOrderProductMappingRepository.InsertAsync(mapping);
+            }
+
+            // Fire event to update stock
             var selectedProducts = model.Products.Select(p => new SelectedProductModel
             {
                 ProductId = p.ProductId,
                 QuantityToOrder = p.QuantityToOrder
             }).ToList();
 
-            // Fire the event to update stock
             if (selectedProducts.Any())
-            {
                 await _eventPublisher.PublishAsync(new PurchaseOrderSavedEvent(selectedProducts));
-            }
 
             return Json(new { success = true });
         }
+
+
+        public async Task<IActionResult> PurchaseOrderProductsList(int purchaseOrderId)
+        {
+            var mappings = await _purchaseOrderProductMappingRepository.Table
+                .Where(m => m.PurchaseOrderId == purchaseOrderId)
+                .ToListAsync();
+
+            var models = new List<PurchaseOrderProductMappingModel>();
+
+            foreach (var map in mappings)
+            {
+                var product = await _productService.GetProductByIdAsync(map.ProductId);
+                if (product != null)
+                {
+                    models.Add(new PurchaseOrderProductMappingModel
+                    {
+                        ProductName = product.Name,
+                        Sku = product.Sku,
+                        CurrentStock = product.StockQuantity,
+                        QuantityToOrder = map.QuantityToOrder,
+                        UnitCost = map.UnitCost,
+                    });
+                }
+            }
+
+            return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/PurchaseOrderProductsList.cshtml", models);
+        }
+
+
 
 
 
