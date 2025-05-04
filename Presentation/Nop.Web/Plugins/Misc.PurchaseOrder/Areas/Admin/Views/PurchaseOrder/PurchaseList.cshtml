@@ -129,7 +129,7 @@
                         Title = T("Admin.PurchaseOrder.Fields.CreatedBy").Text,
                         Width = "150"
                         },
-                        new ColumnProperty(null)
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchaseOrderModel.PurchaseOrderId))
                         {
                         Title = T("Admin.Common.View").Text,
                         Render = new RenderCustom("renderViewButton"),
@@ -147,7 +147,7 @@
 
 <script>
     function renderViewButton(data, type, row, meta) {
-        var url = '@Url.Action("PurchaseOrderProductsList", "PurchaseOrder")' + '?purchaseOrderId=' + row.PurchaseOrderId;
+        var url = '@Url.Action("PurchasedProduct", "PurchaseOrder")' + '?purchaseOrderId=' + row.PurchaseOrderId;
         return '<a class="btn btn-default" href="' + url + '" title="@T("Admin.Common.View")">' +
                '<i class="fas fa-eye"></i>' +
                '</a>';

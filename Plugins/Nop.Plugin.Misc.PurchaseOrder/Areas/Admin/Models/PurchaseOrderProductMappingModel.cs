@@ -1,8 +1,6 @@
-﻿using Nop.Web.Framework.Models;
-
-namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models
+﻿namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models
 {
-    public record class PurchaseOrderProductMappingModel : BaseNopEntityModel
+    public class PurchaseOrderProductMappingModel
     {
         public string ProductName { get; set; }
         public string Sku { get; set; }

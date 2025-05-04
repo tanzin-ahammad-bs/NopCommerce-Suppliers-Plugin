@@ -9,6 +9,7 @@ using Nop.Core.Domain.Catalog;
 using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Factories;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services;
 using Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Services;
@@ -87,28 +88,6 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
             var model = await _purchaseOrderModelFactory.PreparePurchaseOrderListModelAsync(searchModel);
             return Json(model);
         }
-
-
-        //Supplier List Page
-        public virtual async Task<IActionResult> SupplierList()
-        {
-            var model = await _suppliersModelFactory.PrepareSupplierSearchModelAsync(new SuppliersSearchModel());
-            return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/SupplierList.cshtml", model);
-        }
-
-
-        [HttpPost]
-        public virtual async Task<IActionResult> SupplierList(SuppliersSearchModel searchModel)
-        {
-            var model = await _suppliersModelFactory.PrepareSuppliersListModelAsync(searchModel);
-            return Json(model);
-        }
-
-
-
-
-
-
 
 
         [AuthorizeAdmin]
@@ -223,7 +202,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
             return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/AddProductPopup.cshtml", model);
         }
 
-        [AuthorizeAdmin]
+[AuthorizeAdmin]
 [Area(AreaNames.ADMIN)]
 [HttpPost]
 public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRequestModel model)
@@ -404,14 +383,14 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
                 .Where(m => m.PurchaseOrderId == purchaseOrderId)
                 .ToListAsync();
 
-            var models = new List<PurchaseOrderProductMappingModel>();
+            var models = new List<PurchasedProductMappingModel>();
 
             foreach (var map in mappings)
             {
                 var product = await _productService.GetProductByIdAsync(map.ProductId);
                 if (product != null)
                 {
-                    models.Add(new PurchaseOrderProductMappingModel
+                    models.Add(new PurchasedProductMappingModel
                     {
                         ProductName = product.Name,
                         Sku = product.Sku,
@@ -427,6 +406,28 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
 
 
 
+
+        // Show purchase list view items in data table
+        //Purchased Product
+
+        // GET: Display Search Form
+        public virtual async Task<IActionResult> PurchasedProduct(int purchaseOrderId)
+        {
+            var model = await _purchaseOrderModelFactory.PreparePurchasedProductSearchModelAsync(new PurchasedProductSearchModel
+            {
+                PurchaseOrderId = purchaseOrderId
+            });
+
+            return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/PurchasedProduct.cshtml", model);
+        }
+
+        // POST: Handle AJAX Data Request
+        [HttpPost]
+        public virtual async Task<IActionResult> PurchasedProduct(PurchasedProductSearchModel searchModel)
+        {
+            var model = await _purchaseOrderModelFactory.PreparePurchasedProductListModelAsync(searchModel);
+            return Json(model);
+        }
 
 
 

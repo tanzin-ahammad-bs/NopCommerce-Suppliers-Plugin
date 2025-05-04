@@ -1,0 +1,127 @@
+@model Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct.PurchasedProductSearchModel
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.PageTitle = T("Admin.PurchaseOrder").Text;
+    NopHtml.SetActiveMenuItemSystemName("PurchaseOrder");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "PurchaseOrderPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<style>
+    .table th, .table td {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+</style>
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.PurchaseOrder")
+    </h1>
+    <div class="float-right">
+        <a asp-action="AddProducts" class="btn btn-primary">
+            <i class="fas fa-square-plus"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="ProductId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="ProductId" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hidden field for PurchaseOrderId -->
+                            <input type="hidden" asp-for="PurchaseOrderId" />
+
+                            <div class="row justify-content-center">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-purchaseorders" class="btn btn-primary btn-search">
+                                        <i class="fas fa-magnifying-glass"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                   {
+                       Name = "purchaseorders-grid",
+                       UrlRead = new DataUrl("PurchasedProduct", "PurchaseOrder", null),
+                       SearchButtonId = "search-purchaseorders",
+                       Length = Model.PageSize,
+                       LengthMenu = Model.AvailablePageSizes,
+                       Filters = new List<FilterParameter>
+                        {
+                        new FilterParameter(nameof(Model.ProductId)),
+                        new FilterParameter(nameof(Model.PurchaseOrderId))
+                        },
+                       ColumnCollection = new List<ColumnProperty>
+                        {
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct.PurchasedProductMappingModel.PurchaseOrderId))
+                        {
+                        Title = T("Admin.PurchaseOrder.Fields.PurchaseOrderId").Text,
+                        Width = "100"
+                        },
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct.PurchasedProductMappingModel.ProductName))
+                        {
+                        Title = T("Admin.PurchaseOrder.Fields.ProductName").Text,
+                        Width = "200"
+                        },
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct.PurchasedProductMappingModel.Sku))
+                        {
+                        Title = T("Admin.PurchaseOrder.Fields.Sku").Text,
+                        Width = "150"
+                        },
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct.PurchasedProductMappingModel.CurrentStock))
+                        {
+                        Title = T("Admin.PurchaseOrder.Fields.CurrentStock").Text,
+                        Width = "100"
+                        },
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct.PurchasedProductMappingModel.QuantityToOrder))
+                        {
+                        Title = T("Admin.PurchaseOrder.Fields.QuantityToOrder").Text,
+                        Width = "100"
+                        },
+                        new ColumnProperty(nameof(Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct.PurchasedProductMappingModel.UnitCost))
+                        {
+                        Title = T("Admin.PurchaseOrder.Fields.UnitCost").Text,
+                        Width = "100"
+                        }
+                        }
+                   })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

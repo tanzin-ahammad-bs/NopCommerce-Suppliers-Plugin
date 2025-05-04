@@ -8,10 +8,13 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
     public class PurchaseOrderService : IPurchaseOrderService
     {
         private readonly IRepository<PurchaseOrderList> _purchaseOrderRepository;
+        private readonly IRepository<PurchaseOrderProductMapping> _purchaseOrderProductMappingRepository;
 
-        public PurchaseOrderService(IRepository<PurchaseOrderList> purchaseOrderRepository)
+        public PurchaseOrderService(IRepository<PurchaseOrderList> purchaseOrderRepository, IRepository<PurchaseOrderProductMapping> purchaseOrderProductMappingRepository)
         {
             _purchaseOrderRepository = purchaseOrderRepository;
+            _purchaseOrderProductMappingRepository = purchaseOrderProductMappingRepository;
+
         }
 
         public virtual async Task<IPagedList<PurchaseOrderList>> GetAllPurchaseOrdersAsync(string supplierName = "", DateTime? startDate = null, DateTime? endDate = null, int pageIndex = 0, int pageSize = int.MaxValue)
@@ -32,6 +35,29 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
                 return query;
             }, pageIndex, pageSize);
         }
+
+
+
+
+
+        public virtual async Task<IPagedList<PurchaseOrderProductMapping>> GetAllPurchasedProductAsync(int productId = 0, int purchaseOrderId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+        {
+            return await _purchaseOrderProductMappingRepository.GetAllPagedAsync(query =>
+            {
+                if (productId > 0)
+                    query = query.Where(p => p.ProductId == productId);
+
+                if (purchaseOrderId > 0)
+                    query = query.Where(p => p.PurchaseOrderId == purchaseOrderId);
+
+                return query;
+            }, pageIndex, pageSize);
+        }
+
+
+
+
+
 
 
 

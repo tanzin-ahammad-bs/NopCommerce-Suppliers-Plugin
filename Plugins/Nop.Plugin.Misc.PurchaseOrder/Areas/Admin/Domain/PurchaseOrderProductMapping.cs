@@ -5,6 +5,8 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain
 {
     public class PurchaseOrderProductMapping : BaseEntity
     {
+     
+
         public int PurchaseOrderId { get; set; }
         public int ProductId { get; set; }
 
