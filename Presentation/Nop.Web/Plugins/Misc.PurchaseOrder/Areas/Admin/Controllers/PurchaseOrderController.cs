@@ -19,6 +19,9 @@ using Nop.Core.Events;
 using Nop.Plugin.Misc.PurchaseOrder.Events;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using DocumentFormat.OpenXml.EMMA;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup;
+using Nop.Web.Framework.Models.DataTables;
+using System.Linq;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 {
@@ -69,8 +72,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 
 
 
-        [AuthorizeAdmin]
-        [Area(AreaNames.ADMIN)]
+        
 
         // GET: Display Search Form
         public virtual async Task<IActionResult> PurchaseList()
@@ -80,8 +82,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
         }
 
         // POST: Handle Search Request (AJAX)
-        [AuthorizeAdmin]
-        [Area(AreaNames.ADMIN)]
+        
         [HttpPost]
         public virtual async Task<IActionResult> PurchaseList(PurchaseOrderSearchModel searchModel)
         {
@@ -89,9 +90,10 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
             return Json(model);
         }
 
+        //
 
-        [AuthorizeAdmin]
-        [Area(AreaNames.ADMIN)]
+
+        
         public virtual IActionResult AddProducts(int id)
         {
             // Fetch all suppliers for dropdown
@@ -117,8 +119,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 
 
 
-        [AuthorizeAdmin]
-        [Area(AreaNames.ADMIN)]
+        
         [HttpGet]
         public virtual JsonResult GetProductsBySupplierId(int? supplierId)
         {
@@ -128,8 +129,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 
 
 
-        [AuthorizeAdmin]
-        [Area(AreaNames.ADMIN)]
+        
         private List<SelectedProductModel> GetProductsBySupplier(int? supplierId)
         {
             var supplierproductMappings = _supplierProductMappingRepository.Table.ToList();
@@ -163,8 +163,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
         }
 
 
-        [AuthorizeAdmin]
-        [Area(AreaNames.ADMIN)]
+      
         [HttpGet]
         public virtual IActionResult ProductListPartial(int? supplierId)
         {
@@ -172,39 +171,118 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
             return PartialView("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/_ProductList.cshtml", products);
         }
 
-        [AuthorizeAdmin]
-        [Area(AreaNames.ADMIN)]
-        [HttpGet]
-        public async Task<IActionResult> AddProductPopup(int supplierId)
-        {
-            var supplierProducts = _productSupplierMappingRepository.Table
-                .Where(x => x.SupplierId == supplierId)
-                .ToList();
 
-            var model = new List<AddProductPopupModel>();
+        // PopUp using data table
 
-            foreach (var sp in supplierProducts)
-            {
-                var product = await _productService.GetProductByIdAsync(sp.ProductId);
-                if (product != null)
-                {
-                    model.Add(new AddProductPopupModel
-                    {
-                        ProductId = product.Id,
-                        ProductName = product.Name,
-                        Published = product.Published
-                    });
-                }
-            }
+        //[HttpGet]
+        //public IActionResult AddProductPopup(int supplierId)
+        //{
 
-            ViewBag.SupplierId = supplierId;
+        //    var searchModel = new AddProductPopupSearchModel
+        //    {
+        //        SupplierId = supplierId
+        //    };
 
-            return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/AddProductPopup.cshtml", model);
-        }
+        //    return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/AddProductPopup.cshtml", searchModel);
+        //}
 
-[AuthorizeAdmin]
-[Area(AreaNames.ADMIN)]
-[HttpPost]
+
+
+
+
+
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> ProductListForPopup(AddProductPopupSearchModel searchModel)
+        //{
+        //    if (searchModel.SupplierId <= 0)
+        //    {
+        //        return Json(new
+        //        {
+        //            data = new List<object>(),
+        //            recordsTotal = 0,
+        //            recordsFiltered = 0
+        //        });
+        //    }
+
+        //    var query = from mapping in _productSupplierMappingRepository.Table
+        //                join product in _productRepository.Table on mapping.ProductId equals product.Id
+        //                where mapping.SupplierId == searchModel.SupplierId
+        //                select new AddProductPopupModel
+        //                {
+        //                    ProductId = product.Id,
+        //                    ProductName = product.Name,
+        //                    Published = product.Published
+        //                };
+
+        //    // Apply search filter
+        //    if (!string.IsNullOrEmpty(searchModel.ProductName))
+        //    {
+        //        query = query.Where(p => p.ProductName.Contains(searchModel.ProductName));
+        //    }
+
+        //    // Paging
+        //    var pageIndex = searchModel.Page > 0 ? searchModel.Page - 1 : 0;
+        //    var pageSize = searchModel.PageSize > 0 ? searchModel.PageSize : 10;
+
+        //    var pagedProducts = await query.ToPagedListAsync(pageIndex, pageSize);
+
+        //    return Json(new
+        //    {
+        //        data = pagedProducts.Select(p => new
+        //        {
+        //            p.ProductId,
+        //            p.ProductName,
+        //            p.Published
+        //        }),
+        //        recordsTotal = pagedProducts.TotalCount,
+        //        recordsFiltered = pagedProducts.TotalCount
+        //    });
+        //}
+
+
+
+
+
+
+
+
+
+
+        // end of popup
+
+
+        //[HttpGet]
+        //public async Task<IActionResult> AddProductPopup(int supplierId)
+        //{
+        //    var supplierProducts = _productSupplierMappingRepository.Table
+        //        .Where(x => x.SupplierId == supplierId)
+        //        .ToList();
+
+        //    var model = new List<AddProductPopupModel>();
+
+        //    foreach (var sp in supplierProducts)
+        //    {
+        //        var product = await _productService.GetProductByIdAsync(sp.ProductId);
+        //        if (product != null)
+        //        {
+        //            model.Add(new AddProductPopupModel
+        //            {
+        //                ProductId = product.Id,
+        //                ProductName = product.Name,
+        //                Published = product.Published
+        //            });
+        //        }
+        //    }
+
+        //    ViewBag.SupplierId = supplierId;
+
+        //    return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/AddProductPopup.cshtml", model);
+        //}
+
+
+        [HttpPost]
 public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRequestModel model)
 {
     if (model == null || model.SelectedProductIds == null || !model.SelectedProductIds.Any())
@@ -264,8 +342,7 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
         }
 
 
-        [AuthorizeAdmin]
-        [Area(AreaNames.ADMIN)]
+      
         [HttpPost]
         public IActionResult UpdateProductMapping([FromBody] UpdateProductMappingModel model)
         {
@@ -294,8 +371,7 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
 
 
 
-        [AuthorizeAdmin]
-        [Area(AreaNames.ADMIN)]
+        
         [HttpPost]
         public IActionResult DeleteProductMapping(int productId, int supplierId)
         {
@@ -314,8 +390,7 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
 
 
 
-        [AuthorizeAdmin]
-        [Area(AreaNames.ADMIN)]
+       
         //[HttpPost]
         //public IActionResult SavePurchaseOrder(string supplierName, decimal totalAmount)
         //{
@@ -377,32 +452,7 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
         }
 
 
-        public async Task<IActionResult> PurchaseOrderProductsList(int purchaseOrderId)
-        {
-            var mappings = await _purchaseOrderProductMappingRepository.Table
-                .Where(m => m.PurchaseOrderId == purchaseOrderId)
-                .ToListAsync();
 
-            var models = new List<PurchasedProductMappingModel>();
-
-            foreach (var map in mappings)
-            {
-                var product = await _productService.GetProductByIdAsync(map.ProductId);
-                if (product != null)
-                {
-                    models.Add(new PurchasedProductMappingModel
-                    {
-                        ProductName = product.Name,
-                        Sku = product.Sku,
-                        CurrentStock = product.StockQuantity,
-                        QuantityToOrder = map.QuantityToOrder,
-                        UnitCost = map.UnitCost,
-                    });
-                }
-            }
-
-            return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/PurchaseOrderProductsList.cshtml", models);
-        }
 
 
 
@@ -426,6 +476,32 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
         public virtual async Task<IActionResult> PurchasedProduct(PurchasedProductSearchModel searchModel)
         {
             var model = await _purchaseOrderModelFactory.PreparePurchasedProductListModelAsync(searchModel);
+            return Json(model);
+        }
+
+
+
+
+
+
+        //Popup
+
+        // GET: Display Search Form
+        public virtual async Task<IActionResult> AddProductPopup(int supplierId)
+        {
+            var model = await _purchaseOrderModelFactory.PreparePopupSearchModelAsync(new AddProductPopupSearchModel
+            {
+                SupplierId = supplierId
+            });
+
+            return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/AddProductPopup.cshtml", model);
+        }
+
+        // POST: Handle AJAX Data Request
+        [HttpPost]
+        public virtual async Task<IActionResult> AddProductPopup(AddProductPopupSearchModel searchModel)
+        {
+            var model = await _purchaseOrderModelFactory.PreparePopupListModelAsync(searchModel);
             return Json(model);
         }
 

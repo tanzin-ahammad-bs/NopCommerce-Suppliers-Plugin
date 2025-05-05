@@ -1,4 +1,5 @@
 ﻿using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Factories
@@ -12,6 +13,9 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Factories
         Task<PurchasedProductSearchModel> PreparePurchasedProductSearchModelAsync(PurchasedProductSearchModel searchModel);
         Task<PurchasedProductListModel> PreparePurchasedProductListModelAsync(PurchasedProductSearchModel searchModel);
 
+
+        Task<AddProductPopupSearchModel> PreparePopupSearchModelAsync(AddProductPopupSearchModel searchModel);
+        Task<AddProductPopupListModel> PreparePopupListModelAsync(AddProductPopupSearchModel searchModel);
 
     }
 }

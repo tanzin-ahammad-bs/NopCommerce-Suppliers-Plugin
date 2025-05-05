@@ -1,65 +1,120 @@
-@using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models
-@model List<AddProductPopupModel>
+@using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup
+@model AddProductPopupSearchModel
 
 @{
-    Layout = "_AdminPopupLayout"; // Uses the nopCommerce standard popup layout
+    Layout = "~/Areas/Admin/Views/Shared/_AdminPopupLayout.cshtml";
     ViewBag.PageTitle = T("Admin.Catalog.Products.RelatedProducts.AddNew").Text;
 }
 
-<form asp-controller="PurchaseOrder" asp-action="AddProductPopup"
-      asp-route-supplierId="@ViewBag.SupplierId"
-      id="saveSelectedProductsForm">
+<style>
+    .table th, .table td {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+</style>
+
+<form asp-controller="PurchaseOrder" asp-action="AddProductPopup" asp-route-supplierId="@Model.SupplierId" id="popup-form">
     <div class="content-header clearfix">
-        <h1 class="float-left">
-            @T("Admin.Catalog.Products.RelatedProducts.AddNew")
-        </h1>
+        <h1 class="float-left">@T("Admin.Catalog.Products.RelatedProducts.AddNew")</h1>
     </div>
+
     <section class="content">
         <div class="container-fluid">
             <div class="form-horizontal">
-                <div class="card card-default card-popup">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" id="selectAll" /></th>
-                                        <th>@T("Admin.Catalog.Products.Fields.Name").Text</th>
-                                        <th>@T("Admin.Catalog.Products.Fields.Published").Text</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var product in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" name="selectedProducts" value="@product.ProductId" />
-                                            </td>
-                                            <td>@product.ProductName</td>
-                                            <td>@(product.Published ? T("Admin.Common.Yes").Text : T("Admin.Common.No").Text)</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                <div class="cards-group">
+                    <div class="card card-default card-search">
+                        <div class="card-body">
+                            <div class="row search-row opened" data-hideAttribute="">
+                                <div class="search-text">@T("Admin.Common.Search")</div>
+                                <div class="icon-search"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></div>
+                                <div class="icon-collapse"><i class="far fa-angle-up" aria-hidden="true"></i></div>
+                            </div>
+
+                            <div class="search-body opened">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="ProductId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="ProductId" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" asp-for="SupplierId" />
+
+                                <div class="row justify-content-center">
+                                    <div class="text-center col-12">
+                                        <button type="button" id="search-products" class="btn btn-primary btn-search">
+                                            <i class="fas fa-magnifying-glass"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-primary" id="saveSelectedProductsBtn">
-                            <i class="far fa-floppy-disk"></i> @T("Admin.Common.Save")
-                        </button>
+
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                       {
+                           Name = "products-popup-grid",
+                           UrlRead = new DataUrl("AddProductPopup", "PurchaseOrder"),
+                           SearchButtonId = "search-products",
+                           Length = Model.PageSize,
+                           LengthMenu = Model.AvailablePageSizes,
+                           Filters = new List<FilterParameter>
+                            {
+                            new FilterParameter(nameof(Model.ProductId)),
+                            new FilterParameter(nameof(Model.SupplierId))
+                            },
+                           ColumnCollection = new List<ColumnProperty>
+                            {
+                            new ColumnProperty(nameof(AddProductPopupModel.ProductId))
+                            {
+                            Render = new RenderCustom("renderCheckbox"),
+                            Width = "50"
+                            },
+                            new ColumnProperty(nameof(AddProductPopupModel.ProductName))
+                            {
+                            Title = T("Admin.Catalog.Products.Fields.Name").Text,
+                            Width = "250"
+                            },
+                            new ColumnProperty(nameof(AddProductPopupModel.Published))
+                            {
+                            Title = T("Admin.Catalog.Products.Fields.Published").Text,
+                            Render = new RenderBoolean(),
+                            Width = "100"
+                            }
+                            }
+                       })
+                        </div>
+                        <div class="card-footer">
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary" id="saveSelectedProductsBtn">
+                                    <i class="far fa-save"></i> @T("Admin.Common.Save")
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </section>
 </form>
 
-<script>
-    $(document).ready(function () {
-        $('#selectAll').click(function () {
-            $('input[name="selectedProducts"]').prop('checked', this.checked);
-        });
 
+<script>
+    function renderCheckbox(data, type, row, meta) {
+        return `<input type="checkbox" name="selectedProducts" value="${data}" />`;
+    }
+
+    $(document).ready(function () {
         $('#saveSelectedProductsBtn').click(function () {
             var selectedProductIds = [];
             $('input[name="selectedProducts"]:checked').each(function () {
@@ -71,7 +126,7 @@
                 return;
             }
 
-            var supplierId = parseInt('@ViewBag.SupplierId');
+            var supplierId = parseInt('@Model.SupplierId');
 
             $.ajax({
                 type: "POST",
@@ -99,37 +154,3 @@
     });
 </script>
 
-<style>
-    .modal-dialog {
-        margin-top: 15vh;
-        margin-left: auto;
-        margin-right: auto;
-        width: 80%;
-        max-width: 900px;
-    }
-
-    .modal-content {
-        max-height: 80vh;
-        overflow-y: auto;
-    }
-
-    .table-responsive {
-        margin-bottom: 15px;
-    }
-
-    .table {
-        width: 100%;
-        margin-bottom: 1rem;
-        color: #212529;
-    }
-
-    th, td {
-        padding: 0.75rem;
-        vertical-align: top;
-        border-top: 1px solid #dee2e6;
-    }
-
-    th {
-        text-align: left;
-    }
-</style>

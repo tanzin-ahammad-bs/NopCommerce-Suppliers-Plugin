@@ -69,7 +69,13 @@
 		<Compile Update="Areas\Admin\Infrastructure\PurchaseOrderAutoMapperProfile.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Models\AddProductPopupModel.cs">
+		<Compile Update="Areas\Admin\Models\AddProductPopup\AddProductPopupModel.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Models\AddProductPopup\AddProductPopupSearchModel.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Areas\Admin\Models\AddProductPopup\AddProductPopupListModel.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
 		<Compile Update="Areas\Admin\Models\PurchasedProduct\PurchasedProductListModel.cs">
@@ -133,9 +139,6 @@
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Areas\Admin\Views\PurchaseOrder\PurchasedProduct.cshtml">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="Areas\Admin\Views\PurchaseOrder\PurchaseOrderProductsList.cshtml">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Areas\Admin\Views\PurchaseOrder\PurchaseList.cshtml">

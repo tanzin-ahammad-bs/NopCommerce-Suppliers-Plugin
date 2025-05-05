@@ -2,9 +2,12 @@
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Factories;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct;
+using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
 using Nop.Services.Catalog;
 using Nop.Web.Framework.Models.Extensions;
+using AddProductPopupListModel = Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup.AddProductPopupListModel;
 
 namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Factories
 {
@@ -107,6 +110,56 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Factories
 
 
         public Task<PurchasedProductSearchModel> PreparePurchasedProductSearchModelAsync(PurchasedProductSearchModel searchModel)
+        {
+            ArgumentNullException.ThrowIfNull(searchModel);
+            searchModel.SetGridPageSize();
+            return Task.FromResult(searchModel);
+        }
+
+
+
+
+        //pop up
+        public async Task<AddProductPopupListModel> PreparePopupListModelAsync(AddProductPopupSearchModel searchModel)
+        {
+            ArgumentNullException.ThrowIfNull(searchModel);
+
+            var purchaseOrdersPopup = await _purchaseOrderService.GetAllPopupAsync(
+                productId: searchModel.ProductId,
+                supplierId: searchModel.SupplierId,
+                pageIndex: searchModel.Page - 1,
+                pageSize: searchModel.PageSize
+            );
+
+            var model = await new AddProductPopupListModel().PrepareToGridAsync<AddProductPopupListModel, AddProductPopupModel, ProductSupplierMapping>(
+                searchModel, purchaseOrdersPopup, () => GetPopupMappingModelsAsync(purchaseOrdersPopup));
+
+            return model;
+        }
+
+        private async IAsyncEnumerable<AddProductPopupModel> GetPopupMappingModelsAsync(IEnumerable<ProductSupplierMapping> purchaseOrdersPopup)
+        {
+            foreach (var po in purchaseOrdersPopup)
+            {
+                var product = await _productService.GetProductByIdAsync(po.ProductId);
+                if (product != null)
+                {
+                    yield return new AddProductPopupModel
+                    {
+                        Id = po.Id,
+                        ProductId = po.ProductId,
+                        ProductName = product.Name,
+                        Published = product.Published
+                    };
+                }
+            }
+        }
+
+
+
+
+
+        public Task<AddProductPopupSearchModel> PreparePopupSearchModelAsync(AddProductPopupSearchModel searchModel)
         {
             ArgumentNullException.ThrowIfNull(searchModel);
             searchModel.SetGridPageSize();

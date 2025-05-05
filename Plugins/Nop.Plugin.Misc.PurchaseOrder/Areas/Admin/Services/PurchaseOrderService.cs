@@ -2,6 +2,7 @@
 using Nop.Data;
 using Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Services;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
+using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
 {
@@ -9,11 +10,13 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
     {
         private readonly IRepository<PurchaseOrderList> _purchaseOrderRepository;
         private readonly IRepository<PurchaseOrderProductMapping> _purchaseOrderProductMappingRepository;
+        private readonly IRepository<ProductSupplierMapping> _productSupplierMappingRepository;
 
-        public PurchaseOrderService(IRepository<PurchaseOrderList> purchaseOrderRepository, IRepository<PurchaseOrderProductMapping> purchaseOrderProductMappingRepository)
+        public PurchaseOrderService(IRepository<PurchaseOrderList> purchaseOrderRepository, IRepository<PurchaseOrderProductMapping> purchaseOrderProductMappingRepository, IRepository<ProductSupplierMapping> productSupplierMappingRepository)
         {
             _purchaseOrderRepository = purchaseOrderRepository;
             _purchaseOrderProductMappingRepository = purchaseOrderProductMappingRepository;
+            _productSupplierMappingRepository = productSupplierMappingRepository;
 
         }
 
@@ -49,6 +52,24 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
 
                 if (purchaseOrderId > 0)
                     query = query.Where(p => p.PurchaseOrderId == purchaseOrderId);
+
+                return query;
+            }, pageIndex, pageSize);
+        }
+
+
+
+        //pop up
+
+        public virtual async Task<IPagedList<ProductSupplierMapping>> GetAllPopupAsync(int productId = 0, int supplierId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+        {
+            return await _productSupplierMappingRepository.GetAllPagedAsync(query =>
+            {
+                if (productId > 0)
+                    query = query.Where(p => p.ProductId == productId);
+
+                if (supplierId > 0)
+                    query = query.Where(p => p.SupplierId == supplierId);
 
                 return query;
             }, pageIndex, pageSize);
