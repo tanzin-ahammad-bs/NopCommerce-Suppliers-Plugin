@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Nop.Core.Domain.Catalog;
-using Nop.Services.Catalog;
+﻿using Nop.Services.Catalog;
 using Nop.Services.Events;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Events
@@ -21,7 +19,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Events
                 var product = await _productService.GetProductByIdAsync(item.ProductId);
                 if (product != null)
                 {
-                    product.StockQuantity += item.QuantityToOrder; // Only add once
+                    product.StockQuantity += item.QuantityToOrder;
                     await _productService.UpdateProductAsync(product);
                 }
             }

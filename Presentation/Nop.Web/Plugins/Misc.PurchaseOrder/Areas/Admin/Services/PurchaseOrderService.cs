@@ -43,10 +43,6 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
             }, pageIndex, pageSize);
         }
 
-
-
-
-
         public virtual async Task<IPagedList<PurchaseOrderProductMapping>> GetAllPurchasedProductAsync(string productName = null, int purchaseOrderId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             return await _purchaseOrderProductMappingRepository.GetAllPagedAsync(query =>
@@ -71,7 +67,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
                             select mapping;
                 }
 
-                // Filter by SupplierId
+                // Filter by PurchaseOrderId
                 if (purchaseOrderId > 0)
                     query = query.Where(p => p.PurchaseOrderId == purchaseOrderId);
 
@@ -79,9 +75,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
             }, pageIndex, pageSize);
         }
 
-
-
-        //pop up
+        //Pop up
 
         public virtual async Task<IPagedList<ProductSupplierMapping>> GetAllPopupAsync(string productName = null, int supplierId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
         {
@@ -114,10 +108,6 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
                 return query;
             }, pageIndex, pageSize);
         }
-
-
-
-
 
 
     }

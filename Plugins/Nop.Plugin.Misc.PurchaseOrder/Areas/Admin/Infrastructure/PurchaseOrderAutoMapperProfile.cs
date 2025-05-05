@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Nop.Core.Infrastructure.Mapper;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup;
 using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
-using Nop.Core.Domain.Catalog;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Infrastructure
 {
@@ -23,11 +21,6 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Infrastructure
             CreateMap<PurchaseOrderProductMapping, PurchaseOrderProductMappingModel>();
             CreateMap<PurchaseOrderProductMappingModel, PurchaseOrderProductMapping>();
 
-
-           
-
-        
-
             CreateMap<SupplierProductMapping, SelectedProductModel>();
             CreateMap<SelectedProductModel, SupplierProductMapping>();
 
@@ -35,10 +28,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Infrastructure
             CreateMap<AddProductPopupModel, ProductSupplierMapping>();
 
             CreateMap<PurchaseOrderProductMapping, AddProductPopupModel>();
-            CreateMap<AddProductPopupModel, PurchaseOrderProductMapping>();
-
-
-            
+            CreateMap<AddProductPopupModel, PurchaseOrderProductMapping>();   
 
         }
     }

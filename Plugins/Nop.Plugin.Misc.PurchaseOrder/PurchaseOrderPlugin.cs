@@ -19,8 +19,6 @@ public class PurchaseOrderPlugin : BasePlugin
         _localizationService = localizationService;
     }
    
-
-    
     public override async Task InstallAsync()
     {
         await base.InstallAsync();
@@ -30,7 +28,6 @@ public class PurchaseOrderPlugin : BasePlugin
     {
         await base.UninstallAsync();
     }
-
 
     public override async Task UpdateAsync(string currentVersion, string targetVersion)
     {
@@ -113,8 +110,6 @@ public class PurchaseOrderPlugin : BasePlugin
             if (!await _permissionService.AuthorizeAsync(StandardPermission.Configuration.MANAGE_PLUGINS))
                 return;
 
-            
-
             eventMessage.RootMenuItem.InsertAfter("Help",
                 new AdminMenuItem
                 {
@@ -125,12 +120,7 @@ public class PurchaseOrderPlugin : BasePlugin
                     Visible = true
                 });
 
-
-
-
-
         }
     }
-
 
 }

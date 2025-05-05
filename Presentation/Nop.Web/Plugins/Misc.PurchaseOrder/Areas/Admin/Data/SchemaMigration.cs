@@ -10,7 +10,6 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Data
     {
         public override void Up()
         {
-
             Create.TableFor<PurchaseOrderList>();
             Create.TableFor<SupplierProductMapping>();
             Create.TableFor<PurchaseOrderProductMapping>();

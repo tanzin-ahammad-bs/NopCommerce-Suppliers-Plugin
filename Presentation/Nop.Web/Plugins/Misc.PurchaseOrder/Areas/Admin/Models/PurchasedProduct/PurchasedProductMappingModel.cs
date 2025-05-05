@@ -6,7 +6,6 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct
     {
         public int PurchaseOrderId { get; set; }
         public int ProductId { get; set; }
-        
         public string ProductName { get; set; }
         public string Sku { get; set; }
         public int CurrentStock { get; set; }

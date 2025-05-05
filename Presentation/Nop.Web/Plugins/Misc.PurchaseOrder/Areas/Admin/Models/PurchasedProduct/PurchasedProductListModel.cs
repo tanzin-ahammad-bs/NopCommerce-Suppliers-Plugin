@@ -1,5 +1,4 @@
-﻿using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct;
-using Nop.Web.Framework.Models;
+﻿using Nop.Web.Framework.Models;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct;
 public partial record PurchasedProductListModel : BasePagedListModel<PurchasedProductMappingModel>

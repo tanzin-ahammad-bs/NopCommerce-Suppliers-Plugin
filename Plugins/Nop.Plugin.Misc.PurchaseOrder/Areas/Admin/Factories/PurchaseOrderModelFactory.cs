@@ -21,7 +21,7 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Factories
             _purchaseOrderService = purchaseOrderService;
             _productService = productService;
         }
-
+        // Purchase Order
         public async Task<PurchaseOrderListModel> PreparePurchaseOrderListModelAsync(PurchaseOrderSearchModel searchModel)
         {
             ArgumentNullException.ThrowIfNull(searchModel);
@@ -50,7 +50,7 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Factories
                     }).ToAsyncEnumerable();
                 });
 
-
+            
             return model;
         }
 
@@ -60,10 +60,6 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Factories
             searchModel.SetGridPageSize();
             return Task.FromResult(searchModel);
         }
-
-
-
-
 
         // Purchased Product
         public async Task<PurchasedProductListModel> PreparePurchasedProductListModelAsync(PurchasedProductSearchModel searchModel)
@@ -105,10 +101,6 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Factories
             }
         }
 
-
-
-
-
         public Task<PurchasedProductSearchModel> PreparePurchasedProductSearchModelAsync(PurchasedProductSearchModel searchModel)
         {
             ArgumentNullException.ThrowIfNull(searchModel);
@@ -116,10 +108,7 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Factories
             return Task.FromResult(searchModel);
         }
 
-
-
-
-        //pop up
+        //Pop up
         public async Task<AddProductPopupListModel> PreparePopupListModelAsync(AddProductPopupSearchModel searchModel)
         {
             ArgumentNullException.ThrowIfNull(searchModel);
@@ -155,21 +144,12 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Factories
             }
         }
 
-
-
-
-
         public Task<AddProductPopupSearchModel> PreparePopupSearchModelAsync(AddProductPopupSearchModel searchModel)
         {
             ArgumentNullException.ThrowIfNull(searchModel);
             searchModel.SetGridPageSize();
             return Task.FromResult(searchModel);
         }
-
-
-
-
-
 
 
     }

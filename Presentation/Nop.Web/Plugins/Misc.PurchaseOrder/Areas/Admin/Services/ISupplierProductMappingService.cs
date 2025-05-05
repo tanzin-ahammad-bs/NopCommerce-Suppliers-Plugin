@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
+﻿using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
 {

@@ -13,15 +13,11 @@ using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services;
 using Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Services;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Models;
 using Nop.Plugin.Misc.Suppliers.Areas.Admin.Factories;
 using Nop.Core.Events;
 using Nop.Plugin.Misc.PurchaseOrder.Events;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using DocumentFormat.OpenXml.EMMA;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup;
-using Nop.Web.Framework.Models.DataTables;
-using System.Linq;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 {
@@ -68,13 +64,10 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
             _eventPublisher = eventPublisher;
             _purchaseOrderProductMappingRepository = purchaseOrderProductMappingRepository;
         }
-
-
-
-
         
 
         // GET: Display Search Form
+        // First Page of Purchase Order Plugin (Showing Purchase List)
         public virtual async Task<IActionResult> PurchaseList()
         {
             var model = await _purchaseOrderModelFactory.PreparePurchaseOrderSearchModelAsync(new PurchaseOrderSearchModel());
@@ -90,9 +83,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
             return Json(model);
         }
 
-        //
-
-
+        // Add Products Page
         
         public virtual IActionResult AddProducts(int id)
         {
@@ -115,10 +106,6 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 
             return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/AddProducts.cshtml", model);
         }
-
-
-
-
         
         [HttpGet]
         public virtual JsonResult GetProductsBySupplierId(int? supplierId)
@@ -126,9 +113,6 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
             var products = GetProductsBySupplier(supplierId);
             return Json(products);
         }
-
-
-
         
         private List<SelectedProductModel> GetProductsBySupplier(int? supplierId)
         {
@@ -154,15 +138,13 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
                 QuantityToOrder = x.Mapping.QuantityToOrder,
                 UnitCost = x.Mapping.UnitCost,
                 LineTotal = x.Mapping.LineTotal,
-                CurrentStock = x.Product.StockQuantity, // ✅ Added this line
+                CurrentStock = x.Product.StockQuantity,
                 SupplierId = x.Supplier.Id,
                 SupplierName = x.Supplier.Name
             }).ToList();
 
             return productModels;
         }
-
-
       
         [HttpGet]
         public virtual IActionResult ProductListPartial(int? supplierId)
@@ -171,56 +153,45 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
             return PartialView("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/_ProductList.cshtml", products);
         }
 
-
-    
-
-
         [HttpPost]
-public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRequestModel model)
-{
-    if (model == null || model.SelectedProductIds == null || !model.SelectedProductIds.Any())
-    {
-        return Json(new { success = false, message = "No products selected." });
-    }
-
-    var existingMappings = _supplierProductMappingService
-        .GetAll()
-        .Where(spm => spm.SupplierId == model.SupplierId)
-        .Select(spm => spm.ProductId)
-        .ToHashSet();
-
-    var newProductIds = model.SelectedProductIds
-        .Where(id => !existingMappings.Contains(id))
-        .ToList();
-
-    if (!newProductIds.Any())
-    {
-        return Json(new { success = false, message = "All selected products are already added." });
-    }
-
-    foreach (var productId in newProductIds)
-    {
-        var mapping = new SupplierProductMapping
+        public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRequestModel model)
         {
-            SupplierId = model.SupplierId,
-            ProductId = productId,
-            QuantityToOrder = 1,
-            UnitCost = 0m,
-            LineTotal = 0m
-        };
+            if (model == null || model.SelectedProductIds == null || !model.SelectedProductIds.Any())
+            {
+                return Json(new { success = false, message = "No products selected." });
+            }
 
-        _supplierProductMappingService.Insert(mapping);
-    }
+            var existingMappings = _supplierProductMappingService
+                .GetAll()
+                .Where(spm => spm.SupplierId == model.SupplierId)
+                .Select(spm => spm.ProductId)
+                .ToHashSet();
 
-    return Json(new { success = true, refreshPage = true });
-}
+            var newProductIds = model.SelectedProductIds
+                .Where(id => !existingMappings.Contains(id))
+                .ToList();
 
+            if (!newProductIds.Any())
+            {
+                return Json(new { success = false, message = "All selected products are already added." });
+            }
 
+            foreach (var productId in newProductIds)
+            {
+                var mapping = new SupplierProductMapping
+                {
+                    SupplierId = model.SupplierId,
+                    ProductId = productId,
+                    QuantityToOrder = 1,
+                    UnitCost = 0m,
+                    LineTotal = 0m
+                };
 
+                _supplierProductMappingService.Insert(mapping);
+            }
 
-
-
-
+            return Json(new { success = true, refreshPage = true });
+        }
 
         // DTO for updating product mapping
         public class UpdateProductMappingModel
@@ -232,8 +203,6 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
             public decimal LineTotal { get; set; }
         }
 
-
-      
         [HttpPost]
         public IActionResult UpdateProductMapping([FromBody] UpdateProductMappingModel model)
         {
@@ -260,9 +229,6 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
             });
         }
 
-
-
-        
         [HttpPost]
         public IActionResult DeleteProductMapping(int productId, int supplierId)
         {
@@ -276,10 +242,6 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
 
             return Json(new { success = true, message = "Product deleted successfully." });
         }
-
-
-
-
 
         [HttpPost]
         public async Task<IActionResult> SavePurchaseOrder([FromBody] SavePurchaseOrderRequest model)
@@ -331,12 +293,6 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
             return Json(new { success = true });
         }
 
-
-
-
-
-
-
         // Show purchase list view items in data table
         //Purchased Product
 
@@ -359,11 +315,6 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
             return Json(model);
         }
 
-
-
-
-
-
         //Popup
 
         // GET: Display Search Form
@@ -384,15 +335,6 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
             var model = await _purchaseOrderModelFactory.PreparePopupListModelAsync(searchModel);
             return Json(model);
         }
-
-
-
-
-
-
-
-
-
 
 
     }
