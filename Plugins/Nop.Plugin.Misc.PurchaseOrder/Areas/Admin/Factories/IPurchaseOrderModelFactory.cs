@@ -1,6 +1,6 @@
-﻿using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models;
-using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup;
+﻿using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchaseOrderList;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Factories
 {

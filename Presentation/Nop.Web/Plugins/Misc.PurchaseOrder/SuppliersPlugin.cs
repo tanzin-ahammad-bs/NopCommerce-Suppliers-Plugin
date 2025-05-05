@@ -1,4 +1,4 @@
-﻿using Nop.Plugin.Misc.Suppliers.Areas.Admin.Components;
+﻿using Nop.Plugin.Misc.Suppliers.Components;
 using Nop.Services.Cms;
 using Nop.Services.Events;
 using Nop.Services.Localization;

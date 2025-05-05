@@ -1,8 +1,8 @@
 ﻿using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Vendors;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
 using Nop.Plugin.Misc.Suppliers.Areas.Admin.Models;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Services;
+using Nop.Plugin.Misc.Suppliers.Domain;
+using Nop.Plugin.Misc.Suppliers.Services;
 using Nop.Services.Attributes;
 using Nop.Services.Common;
 using Nop.Services.Customers;

@@ -2,8 +2,9 @@
 using Nop.Core.Infrastructure.Mapper;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
 using Nop.Plugin.Misc.PurchaseOrder.Domain;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchaseOrderList;
+using Nop.Plugin.Misc.Suppliers.Domain;
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Infrastructure
 {

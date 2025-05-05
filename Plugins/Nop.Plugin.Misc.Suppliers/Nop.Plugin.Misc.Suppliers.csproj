@@ -76,16 +76,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Areas\Admin\Components\ProductSuppliersWidgetViewComponent.cs">
+    <Compile Update="Components\ProductSuppliersWidgetViewComponent.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Areas\Admin\Controllers\SuppliersController.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Areas\Admin\Data\SchemaMigration.cs">
+    <Compile Update="Data\SchemaMigration.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Areas\Admin\Domain\Supplier.cs">
+    <Compile Update="Domain\Supplier.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Areas\Admin\Factories\ISuppliersModelFactory.cs">
@@ -94,19 +94,19 @@
     <Compile Update="Areas\Admin\Factories\SuppliersModelFactory.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Areas\Admin\Infrastructure\RouteProvider.cs">
+    <Compile Update="Infrastructure\RouteProvider.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Areas\Admin\Infrastructure\SuppliersAutoMapperProfile.cs">
+    <Compile Update="Infrastructure\SuppliersAutoMapperProfile.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Areas\Admin\Infrastructure\ViewLocationExpander.cs">
+    <Compile Update="Infrastructure\ViewLocationExpander.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Areas\Admin\Models\SupplierModel.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Areas\Admin\Services\SupplierService.cs">
+    <Compile Update="Services\SupplierService.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="SuppliersPlugin.cs">

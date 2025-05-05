@@ -1,5 +1,5 @@
-﻿using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Models;
+﻿using Nop.Plugin.Misc.Suppliers.Areas.Admin.Models;
+using Nop.Plugin.Misc.Suppliers.Domain;
 
 namespace Nop.Plugin.Misc.Suppliers.Areas.Admin.Factories;
 public interface ISuppliersModelFactory

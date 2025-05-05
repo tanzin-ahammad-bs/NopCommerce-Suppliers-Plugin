@@ -3,10 +3,8 @@ using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework;
 using Nop.Data;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Services;
 using Nop.Services.Catalog;
 using Nop.Core.Domain.Catalog;
-using Nop.Plugin.Misc.Suppliers.Areas.Admin.Domain;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Factories;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchasedProduct;
@@ -17,6 +15,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup;
 using Nop.Plugin.Misc.PurchaseOrder.Domain;
 using Nop.Plugin.Misc.PurchaseOrder.Services;
+using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.PurchaseOrderList;
+using Nop.Plugin.Misc.Suppliers.Domain;
+using Nop.Plugin.Misc.Suppliers.Services;
+
 
 namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 {
@@ -24,6 +26,8 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
     [Area(AreaNames.ADMIN)]
     public class PurchaseOrderController : BasePluginController
     {
+
+        #region Fields
 
         private readonly IPurchaseOrderModelFactory _purchaseOrderModelFactory;
         private readonly IRepository<Product> _productRepository;
@@ -39,7 +43,9 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<PurchaseOrderProductMapping> _purchaseOrderProductMappingRepository;
 
+        #endregion
 
+        #region Ctor
         public PurchaseOrderController(IPurchaseOrderModelFactory purchaseOrderModelFactory, IRepository<Product> productRepository,
                                           IRepository<ProductSupplierMapping> productSupplierMappingRepository,
                                           IRepository<Supplier> supplierRepository, 
@@ -63,7 +69,10 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
             _eventPublisher = eventPublisher;
             _purchaseOrderProductMappingRepository = purchaseOrderProductMappingRepository;
         }
-        
+
+        #endregion
+
+        #region Methods
 
         // GET: Display Search Form
         // First Page of Purchase Order Plugin (Showing Purchase List)
@@ -105,6 +114,8 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 
             return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/AddProducts.cshtml", model);
         }
+
+        
         
         [HttpGet]
         public virtual JsonResult GetProductsBySupplierId(int? supplierId)
@@ -144,13 +155,8 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
 
             return productModels;
         }
-      
-        [HttpGet]
-        public virtual IActionResult ProductListPartial(int? supplierId)
-        {
-            var products = GetProductsBySupplier(supplierId);
-            return PartialView("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/_ProductList.cshtml", products);
-        }
+
+
 
         [HttpPost]
         public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRequestModel model)
@@ -334,6 +340,17 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
             var model = await _purchaseOrderModelFactory.PreparePopupListModelAsync(searchModel);
             return Json(model);
         }
+
+
+
+
+
+
+
+
+
+
+        #endregion
 
 
     }

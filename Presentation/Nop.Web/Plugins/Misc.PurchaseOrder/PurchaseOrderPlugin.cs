@@ -82,6 +82,7 @@ public class PurchaseOrderPlugin : BasePlugin
             ["Admin.Common.Close"] = "Close",
             ["Admin.Common.Add"] = "Select Product",
             ["Admin.Common.Back"] = "Back",
+            ["Admin.Common.BackToList"] = "Back to list",
             ["Admin.Common.Supplier"] = "Select a Supplier",
             ["Admin.PurchaseOrder.Fields.ProductName"] = "Product Name",
             ["Admin.PurchaseOrder.Fields.Sku"] = "SKU",
