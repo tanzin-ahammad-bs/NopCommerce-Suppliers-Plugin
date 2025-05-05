@@ -24,7 +24,8 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Models.AddProductPopup
         //    }
         //}
 
-        public int ProductId { get; set; }
+        public string ProductName { get; set; }
         public int SupplierId { get; set; }
+
     }
 }

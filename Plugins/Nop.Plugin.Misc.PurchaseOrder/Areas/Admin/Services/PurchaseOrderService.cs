@@ -1,4 +1,5 @@
 ﻿using Nop.Core;
+using Nop.Core.Domain.Catalog;
 using Nop.Data;
 using Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Services;
 using Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Domain;
@@ -11,12 +12,15 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
         private readonly IRepository<PurchaseOrderList> _purchaseOrderRepository;
         private readonly IRepository<PurchaseOrderProductMapping> _purchaseOrderProductMappingRepository;
         private readonly IRepository<ProductSupplierMapping> _productSupplierMappingRepository;
+        private readonly IRepository<Product> _productRepository;
 
-        public PurchaseOrderService(IRepository<PurchaseOrderList> purchaseOrderRepository, IRepository<PurchaseOrderProductMapping> purchaseOrderProductMappingRepository, IRepository<ProductSupplierMapping> productSupplierMappingRepository)
+        public PurchaseOrderService(IRepository<PurchaseOrderList> purchaseOrderRepository, IRepository<PurchaseOrderProductMapping> purchaseOrderProductMappingRepository,
+            IRepository<ProductSupplierMapping> productSupplierMappingRepository, IRepository<Product> productRepository)
         {
             _purchaseOrderRepository = purchaseOrderRepository;
             _purchaseOrderProductMappingRepository = purchaseOrderProductMappingRepository;
             _productSupplierMappingRepository = productSupplierMappingRepository;
+            _productRepository = productRepository;
 
         }
 
@@ -43,13 +47,31 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
 
 
 
-        public virtual async Task<IPagedList<PurchaseOrderProductMapping>> GetAllPurchasedProductAsync(int productId = 0, int purchaseOrderId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual async Task<IPagedList<PurchaseOrderProductMapping>> GetAllPurchasedProductAsync(string productName = null, int purchaseOrderId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             return await _purchaseOrderProductMappingRepository.GetAllPagedAsync(query =>
             {
-                if (productId > 0)
-                    query = query.Where(p => p.ProductId == productId);
+                // Join with Product table
+                query = from mapping in query
+                        join product in _productRepository.Table on mapping.ProductId equals product.Id
+                        select new PurchaseOrderProductMapping
+                        {
+                            Id = mapping.Id,
+                            PurchaseOrderId = mapping.PurchaseOrderId,
+                            ProductId = mapping.ProductId,
+                            // Include other fields from mapping if needed
+                        };
 
+                // Filter by ProductName if provided
+                if (!string.IsNullOrEmpty(productName))
+                {
+                    query = from mapping in query
+                            join product in _productRepository.Table on mapping.ProductId equals product.Id
+                            where product.Name.Contains(productName)
+                            select mapping;
+                }
+
+                // Filter by SupplierId
                 if (purchaseOrderId > 0)
                     query = query.Where(p => p.PurchaseOrderId == purchaseOrderId);
 
@@ -61,13 +83,31 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
 
         //pop up
 
-        public virtual async Task<IPagedList<ProductSupplierMapping>> GetAllPopupAsync(int productId = 0, int supplierId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual async Task<IPagedList<ProductSupplierMapping>> GetAllPopupAsync(string productName = null, int supplierId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             return await _productSupplierMappingRepository.GetAllPagedAsync(query =>
             {
-                if (productId > 0)
-                    query = query.Where(p => p.ProductId == productId);
+                // Join with Product table
+                query = from mapping in query
+                        join product in _productRepository.Table on mapping.ProductId equals product.Id
+                        select new ProductSupplierMapping
+                        {
+                            Id = mapping.Id,
+                            SupplierId = mapping.SupplierId,
+                            ProductId = mapping.ProductId,
+                            // Include other fields from mapping if needed
+                        };
 
+                // Filter by ProductName if provided
+                if (!string.IsNullOrEmpty(productName))
+                {
+                    query = from mapping in query
+                            join product in _productRepository.Table on mapping.ProductId equals product.Id
+                            where product.Name.Contains(productName)
+                            select mapping;
+                }
+
+                // Filter by SupplierId
                 if (supplierId > 0)
                     query = query.Where(p => p.SupplierId == supplierId);
 
@@ -76,28 +116,6 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Services
         }
 
 
-
-
-
-
-
-
-        //public void CreatePurchaseOrder(string supplierName, decimal totalAmount)
-        //{
-        //    var latestId = _purchaseOrderRepository.Table.OrderByDescending(p => p.PurchaseOrderId).Select(p => p.PurchaseOrderId).FirstOrDefault();
-        //    var purchaseOrder = new PurchaseOrderList
-        //    {
-        //        PurchaseOrderId = latestId + 1,
-        //        SupplierName = supplierName,
-        //        CreationDate = DateTime.UtcNow,
-        //        TotalAmount = totalAmount,
-        //        CreatedBy = "Admin"
-        //    };
-
-        //    _purchaseOrderRepository.Insert(purchaseOrder);
-
-
-        //}
 
 
 

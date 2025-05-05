@@ -71,7 +71,7 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Factories
             ArgumentNullException.ThrowIfNull(searchModel);
 
             var purchaseOrders = await _purchaseOrderService.GetAllPurchasedProductAsync(
-                productId: searchModel.ProductId,
+                productName: searchModel.ProductName,
                 purchaseOrderId: searchModel.PurchaseOrderId,
                 pageIndex: searchModel.Page - 1,
                 pageSize: searchModel.PageSize
@@ -125,7 +125,7 @@ namespace Nop.Plugin.Misc.Purchaseorder.Areas.Admin.Factories
             ArgumentNullException.ThrowIfNull(searchModel);
 
             var purchaseOrdersPopup = await _purchaseOrderService.GetAllPopupAsync(
-                productId: searchModel.ProductId,
+                productName: searchModel.ProductName,
                 supplierId: searchModel.SupplierId,
                 pageIndex: searchModel.Page - 1,
                 pageSize: searchModel.PageSize
