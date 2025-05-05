@@ -39,22 +39,22 @@
 		<Compile Update="Areas\Admin\Controllers\PurchaseOrderController.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Data\SchemaMigration.cs">
+		<Compile Update="Data\SchemaMigration.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Domain\PurchaseOrderList.cs">
+		<Compile Update="Domain\PurchaseOrderList.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Domain\PurchaseOrderProductMapping.cs">
+		<Compile Update="Domain\PurchaseOrderProductMapping.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Domain\SupplierProductMapping.cs">
+		<Compile Update="Domain\SupplierProductMapping.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Events\EventConsumers\PurchaseOrderSavedConsumer.cs">
+		<Compile Update="Events\EventConsumers\PurchaseOrderSavedConsumer.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Events\PurchaseOrderSavedEvent.cs">
+		<Compile Update="Events\PurchaseOrderSavedEvent.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
 		<Compile Update="Areas\Admin\Factories\IPurchaseOrderModelFactory.cs">
@@ -63,10 +63,10 @@
 		<Compile Update="Areas\Admin\Factories\PurchaseOrderModelFactory.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Infrastructure\NopStartup.cs">
+		<Compile Update="Infrastructure\NopStartup.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Infrastructure\PurchaseOrderAutoMapperProfile.cs">
+		<Compile Update="Infrastructure\PurchaseOrderAutoMapperProfile.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
 		<Compile Update="Areas\Admin\Models\AddProductPopup\AddProductPopupModel.cs">
@@ -108,22 +108,22 @@
 		<Compile Update="Areas\Admin\Models\SelectedProductModel.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Services\IPurchaseOrderService.cs">
+		<Compile Update="Services\IPurchaseOrderService.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Services\ISelectedProductService.cs">
+		<Compile Update="Services\ISelectedProductService.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Services\ISupplierProductMappingService.cs">
+		<Compile Update="Services\ISupplierProductMappingService.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Services\PurchaseOrderService.cs">
+		<Compile Update="Services\PurchaseOrderService.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Services\SelectedProductService.cs">
+		<Compile Update="Services\SelectedProductService.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
-		<Compile Update="Areas\Admin\Services\SupplierProductMappingService.cs">
+		<Compile Update="Services\SupplierProductMappingService.cs">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
 		<Compile Update="PurchaseOrderPlugin.cs">
