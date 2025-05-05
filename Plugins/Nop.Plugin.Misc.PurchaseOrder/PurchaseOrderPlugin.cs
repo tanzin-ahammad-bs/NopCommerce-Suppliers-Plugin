@@ -85,9 +85,13 @@ public class PurchaseOrderPlugin : BasePlugin
             ["Admin.Common.Close"] = "Close",
             ["Admin.Common.Add"] = "Select Product",
             ["Admin.Common.Back"] = "Back",
-            ["Admin.Common.Supplier"] = "Select a Supplier"
-
-
+            ["Admin.Common.Supplier"] = "Select a Supplier",
+            ["Admin.PurchaseOrder.Fields.ProductName"] = "Product Name",
+            ["Admin.PurchaseOrder.Fields.Sku"] = "SKU",
+            ["Admin.PurchaseOrder.Fields.CurrentStock"] = "Current Stock",
+            ["Admin.PurchaseOrder.Fields.QuantityToOrder"] = "Quantity To Order",
+            ["Admin.PurchaseOrder.Fields.UnitCost"] = "Unit Cost",
+            ["Admin.Common.Update"] = "Update"
 
 
         });

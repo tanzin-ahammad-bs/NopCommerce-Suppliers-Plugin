@@ -172,114 +172,7 @@ namespace Nop.Plugin.Misc.PurchaseOrder.Areas.Admin.Controllers
         }
 
 
-        // PopUp using data table
-
-        //[HttpGet]
-        //public IActionResult AddProductPopup(int supplierId)
-        //{
-
-        //    var searchModel = new AddProductPopupSearchModel
-        //    {
-        //        SupplierId = supplierId
-        //    };
-
-        //    return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/AddProductPopup.cshtml", searchModel);
-        //}
-
-
-
-
-
-
-
-
-        //[HttpPost]
-        //public async Task<IActionResult> ProductListForPopup(AddProductPopupSearchModel searchModel)
-        //{
-        //    if (searchModel.SupplierId <= 0)
-        //    {
-        //        return Json(new
-        //        {
-        //            data = new List<object>(),
-        //            recordsTotal = 0,
-        //            recordsFiltered = 0
-        //        });
-        //    }
-
-        //    var query = from mapping in _productSupplierMappingRepository.Table
-        //                join product in _productRepository.Table on mapping.ProductId equals product.Id
-        //                where mapping.SupplierId == searchModel.SupplierId
-        //                select new AddProductPopupModel
-        //                {
-        //                    ProductId = product.Id,
-        //                    ProductName = product.Name,
-        //                    Published = product.Published
-        //                };
-
-        //    // Apply search filter
-        //    if (!string.IsNullOrEmpty(searchModel.ProductName))
-        //    {
-        //        query = query.Where(p => p.ProductName.Contains(searchModel.ProductName));
-        //    }
-
-        //    // Paging
-        //    var pageIndex = searchModel.Page > 0 ? searchModel.Page - 1 : 0;
-        //    var pageSize = searchModel.PageSize > 0 ? searchModel.PageSize : 10;
-
-        //    var pagedProducts = await query.ToPagedListAsync(pageIndex, pageSize);
-
-        //    return Json(new
-        //    {
-        //        data = pagedProducts.Select(p => new
-        //        {
-        //            p.ProductId,
-        //            p.ProductName,
-        //            p.Published
-        //        }),
-        //        recordsTotal = pagedProducts.TotalCount,
-        //        recordsFiltered = pagedProducts.TotalCount
-        //    });
-        //}
-
-
-
-
-
-
-
-
-
-
-        // end of popup
-
-
-        //[HttpGet]
-        //public async Task<IActionResult> AddProductPopup(int supplierId)
-        //{
-        //    var supplierProducts = _productSupplierMappingRepository.Table
-        //        .Where(x => x.SupplierId == supplierId)
-        //        .ToList();
-
-        //    var model = new List<AddProductPopupModel>();
-
-        //    foreach (var sp in supplierProducts)
-        //    {
-        //        var product = await _productService.GetProductByIdAsync(sp.ProductId);
-        //        if (product != null)
-        //        {
-        //            model.Add(new AddProductPopupModel
-        //            {
-        //                ProductId = product.Id,
-        //                ProductName = product.Name,
-        //                Published = product.Published
-        //            });
-        //        }
-        //    }
-
-        //    ViewBag.SupplierId = supplierId;
-
-        //    return View("~/Plugins/Misc.PurchaseOrder/Areas/Admin/Views/PurchaseOrder/AddProductPopup.cshtml", model);
-        //}
+    
 
 
         [HttpPost]
@@ -321,8 +214,6 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
 
     return Json(new { success = true, refreshPage = true });
 }
-
-
 
 
 
@@ -388,17 +279,6 @@ public IActionResult SaveSelectedProductsFromPopup([FromBody] SaveProductPopupRe
 
 
 
-
-
-       
-        //[HttpPost]
-        //public IActionResult SavePurchaseOrder(string supplierName, decimal totalAmount)
-        //{
-
-        //    _purchaseOrderService.CreatePurchaseOrder(supplierName, totalAmount);
-
-        //    return Json(new { success = true });
-        //}
 
 
         [HttpPost]
